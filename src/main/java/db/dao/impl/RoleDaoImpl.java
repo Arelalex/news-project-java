@@ -119,7 +119,8 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
         }
     }
 
-    public Optional<RoleEntity> findById(int id, Connection connection) {
+    @Override
+    public Optional<RoleEntity> findById(Integer id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
 
@@ -134,6 +135,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
         }
     }
 
+   @Override
     public Optional<RoleEntity> findByRole(Roles role, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ROLE_SQL)) {
             preparedStatement.setString(1, role.name());
@@ -149,6 +151,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
         }
     }
 
+    @Override
     public List<RoleEntity> findAllByFilter(RoleFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

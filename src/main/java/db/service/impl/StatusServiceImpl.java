@@ -58,7 +58,7 @@ public class StatusServiceImpl implements StatusService {
     public List<StatusFilter> findAllByFilter(StatusFilter filter) {
         return statusDao.findAllByFilter(filter)
                 .stream()
-                .map(entity -> statusMapper.toDto(entity))
+                .map(statusMapper::toDto)
                 .toList();
     }
 }

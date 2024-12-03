@@ -105,7 +105,8 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
         }
     }
 
-    public Optional<CategoryEntity> findById(int id, Connection connection) {
+    @Override
+    public Optional<CategoryEntity> findById(Integer id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
 
@@ -121,6 +122,7 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
         }
     }
 
+    @Override
     public List<CategoryEntity> findAllByFilter(CategoryFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
@@ -174,5 +176,4 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
                 resultSet.getString(CATEGORY_CATEGORY)
         );
     }
-
 }

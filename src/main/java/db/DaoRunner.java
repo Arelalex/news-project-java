@@ -1,25 +1,21 @@
 package db;
 
+import db.dao.*;
 import db.dao.impl.*;
-import db.dto.CategoryFilter;
-import db.dto.NewsFilter;
 import db.entity.*;
-import db.enums.Statuses;
 
-import java.sql.ResultSetMetaData;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 public class DaoRunner {
     public static void main(String[] args) {
 
-        var portalUserDao = PortalUserDaoImpl.getInstance();
-        var roleDao = RoleDaoImpl.getInstance();
-        var categoryDao = CategoryDaoImpl.getInstance();
-        var statusDao = StatusDaoImpl.getInstance();
-        var newsDao = NewsDaoImpl.getInstance();
-        var commentDao = CommentDaoImpl.getInstance();
+        PortalUserDao<Integer, PortalUserEntity> portalUserDao = PortalUserDaoImpl.getInstance();
+        RoleDao<Integer, RoleEntity> roleDao = RoleDaoImpl.getInstance();
+        CategoryDao<Integer, CategoryEntity> categoryDao = CategoryDaoImpl.getInstance();
+        StatusDao<Integer, StatusEntity> statusDao = StatusDaoImpl.getInstance();
+        NewsDao<Long, NewsEntity> newsDao = NewsDaoImpl.getInstance();
+        CommentDao<Long, CommentEntity> commentDao = CommentDaoImpl.getInstance();
 
         PortalUserEntity user = new PortalUserEntity();
         user.setId(3);

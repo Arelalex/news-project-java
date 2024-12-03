@@ -166,6 +166,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         }
     }
 
+    @Override
     public Optional<NewsEntity> findById(Long id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
@@ -181,6 +182,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         }
     }
 
+    @Override
     public List<NewsEntity> findAllByFilter(NewsFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
@@ -257,6 +259,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         }
     }
 
+    @Override
     public List<NewsEntity> findByCategoryId(Integer categoryId) {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(FIND_BY_CATEGORY_ID)) {

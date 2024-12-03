@@ -62,7 +62,7 @@ public class RoleServiceImpl implements RoleService {
     public List<RoleFilter> findAllByFilter(RoleFilter filter) {
         return roleDao.findAllByFilter(filter)
                 .stream()
-                .map(entity -> roleMapper.toDto(entity))
+                .map(roleMapper::toDto)
                 .toList();
     }
 }

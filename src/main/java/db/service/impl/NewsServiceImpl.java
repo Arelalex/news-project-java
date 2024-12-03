@@ -67,7 +67,7 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsFilter> findAllByFilter(NewsFilter filter) {
         return newsDao.findAllByFilter(filter)
                 .stream()
-                .map(entity -> newsMapper.toDto(entity))
+                .map(newsMapper::toDto)
                 .toList();
     }
 

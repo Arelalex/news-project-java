@@ -75,7 +75,7 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
     private PortalUserDaoImpl() {
     }
 
-    public static synchronized PortalUserDaoImpl getInstance() { // все сервисы которые будут работать с DAO будут вызыват его через гетИнстанс
+    public static synchronized PortalUserDaoImpl getInstance() {
         if (instance == null) {
             instance = new PortalUserDaoImpl();
         }
@@ -147,7 +147,8 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
         }
     }
 
-    public Optional<PortalUserEntity> findById(int id, Connection connection) {
+    @Override
+    public Optional<PortalUserEntity> findById(Integer id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
 
@@ -163,6 +164,7 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
         }
     }
 
+    @Override
     public List<PortalUserEntity> findAllByFilter(PortalUserFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

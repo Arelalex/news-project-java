@@ -117,7 +117,8 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
         }
     }
 
-    public Optional<StatusEntity> findById(int id, Connection connection) {
+    @Override
+    public Optional<StatusEntity> findById(Integer id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
 
@@ -132,6 +133,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
         }
     }
 
+    @Override
     public List<StatusEntity> findAllByFilter(StatusFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

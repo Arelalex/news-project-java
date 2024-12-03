@@ -13,8 +13,8 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class NewsFilter {
 
-    private int limit;
-    private int offset;
+    private Integer limit;
+    private Integer offset;
     private String title;
     private String description;
     private String content;

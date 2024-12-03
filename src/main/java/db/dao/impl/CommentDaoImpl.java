@@ -136,6 +136,7 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
         }
     }
 
+    @Override
     public Optional<CommentEntity> findById(Long id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setLong(1, id);
@@ -151,6 +152,7 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
         }
     }
 
+    @Override
     public List<CommentEntity> findAllByFilter(CommentFilter filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();

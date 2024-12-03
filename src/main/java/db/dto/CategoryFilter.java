@@ -10,8 +10,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CategoryFilter {
-    int limit;
-    int offset;
+    private Integer limit;
+    private Integer offset;
     private String category;
     private Integer id;
 

@@ -40,7 +40,7 @@ public class CommentServiceImpl implements CommentService {
     public List<CommentFilter> findAll() {
         return commentDao.findAll()
                 .stream()
-                .map(entity -> commentMapper.toDto(entity))
+                .map(commentMapper::toDto)
                 .toList();
     }
 

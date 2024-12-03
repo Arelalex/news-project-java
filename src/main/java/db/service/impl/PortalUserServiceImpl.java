@@ -43,7 +43,7 @@ public class PortalUserServiceImpl implements PortalUserService {
     public List<PortalUserFilter> findAll() {
         return portalUserDao.findAll()
                 .stream()
-                .map(entity -> portalUserMapper.toDto((PortalUserEntity) entity))
+                .map(portalUserMapper::toDto)
                 .toList();
     }
 

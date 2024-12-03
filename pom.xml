@@ -48,6 +48,18 @@
             <version>2.2.0</version>
             <scope>provided</scope>
         </dependency>
+        <!-- jakarta.servlet.jsp-->
+        <dependency>
+            <groupId>jakarta.servlet.jsp.jstl</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl-api</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+        <!-- jakarta.servlet.jsp.jstl -->
+        <dependency>
+            <groupId>org.glassfish.web</groupId>
+            <artifactId>jakarta.servlet.jsp.jstl</artifactId>
+            <version>3.0.1</version>
+        </dependency>
     </dependencies>
 
     <build>

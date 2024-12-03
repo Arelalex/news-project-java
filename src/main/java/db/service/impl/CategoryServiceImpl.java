@@ -60,7 +60,7 @@ public class CategoryServiceImpl implements CategoryService {
     public List<CategoryFilter> findAllByFilter(CategoryFilter filter) {
         return categoryDao.findAllByFilter(filter)
                 .stream()
-                .map(entity -> categoryMapper.toDto(entity))
+                .map(categoryMapper::toDto)
                 .toList();
     }
 }
