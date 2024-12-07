@@ -1,7 +1,7 @@
 package db.mapper;
 
-import db.dto.CommentFilter;
+import db.dto.CommentDto;
 import db.entity.CommentEntity;
 
-public interface CommentMapper extends BaseMapper<CommentEntity, CommentFilter> {
+public interface CommentMapper extends BaseMapper<CommentEntity, CommentDto> {
 }

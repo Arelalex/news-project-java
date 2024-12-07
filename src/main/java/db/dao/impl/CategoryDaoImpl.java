@@ -1,7 +1,7 @@
 package db.dao.impl;
 
 import db.dao.CategoryDao;
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 import db.entity.CategoryEntity;
 import db.exception.*;
 import db.util.ConnectionManager;
@@ -75,7 +75,7 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                categoryEntity.setId(generatedKeys.getInt("id"));
+                categoryEntity.setCategoryId(generatedKeys.getInt("id"));
             }
             return categoryEntity;
         } catch (SQLException throwables) {
@@ -88,7 +88,7 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, categoryEntity.getCategory());
-            preparedStatement.setLong(2, categoryEntity.getId());
+            preparedStatement.setLong(2, categoryEntity.getCategoryId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -123,7 +123,7 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
     }
 
     @Override
-    public List<CategoryEntity> findAllByFilter(CategoryFilter filter) {
+    public List<CategoryEntity> findAllByFilter(CategoryDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getCategory() != null) {

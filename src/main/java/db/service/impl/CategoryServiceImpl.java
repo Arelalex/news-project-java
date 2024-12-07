@@ -1,7 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.CategoryDaoImpl;
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 import db.mapper.CategoryMapper;
 import db.mapper.impl.CategoryMapperImpl;
 import db.service.CategoryService;
@@ -25,16 +25,16 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryFilter findById(Integer id) {
+    public CategoryDto findById(Integer id) {
         return null;
     }
 
     @Override
-    public List<CategoryFilter> findAll() {
+    public List<CategoryDto> findAll() {
         return categoryDao.findAll()
                 .stream()
-                .map(category -> CategoryFilter.builder()
-                        .id(category.getId())
+                .map(category -> CategoryDto.builder()
+                        .categoryId(category.getCategoryId())
                         .category(category.getCategory())
                         .build()
                 )
@@ -42,22 +42,22 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @Override
-    public CategoryFilter save(CategoryFilter dto) {
+    public CategoryDto save(CategoryDto dto) {
         return null;
     }
 
     @Override
-    public CategoryFilter update(CategoryFilter dto) {
+    public CategoryDto update(CategoryDto dto) {
         return null;
     }
 
     @Override
-    public void delete(CategoryFilter dto) {
+    public void delete(CategoryDto dto) {
 
     }
 
     @Override
-    public List<CategoryFilter> findAllByFilter(CategoryFilter filter) {
+    public List<CategoryDto> findAllByFilter(CategoryDto filter) {
         return categoryDao.findAllByFilter(filter)
                 .stream()
                 .map(categoryMapper::toDto)

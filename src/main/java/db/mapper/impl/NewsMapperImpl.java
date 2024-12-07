@@ -1,7 +1,10 @@
 package db.mapper.impl;
 
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
+import db.entity.CategoryEntity;
 import db.entity.NewsEntity;
+import db.entity.PortalUserEntity;
+import db.entity.StatusEntity;
 import db.mapper.NewsMapper;
 
 public class NewsMapperImpl implements NewsMapper {
@@ -19,28 +22,37 @@ public class NewsMapperImpl implements NewsMapper {
     }
 
     @Override
-    public NewsEntity toEntity(NewsFilter dto) {
+    public NewsEntity toEntity(NewsDto dto) {
         return NewsEntity
                 .builder()
+                .newsId(dto.getNewsId())
                 .title(dto.getTitle())
                 .description(dto.getDescription())
                 .content(dto.getContent())
-                .createAt(dto.getCreatedAt())
-                .updateAt(dto.getUpdateAt())
-                .image(dto.getContent())
+                .createdAt(dto.getCreatedAt())
+                .updatedAt(dto.getUpdatedAt())
+                .image(dto.getImage())
+                .user(dto.getUser())
+                .category(dto.getCategory())
+                .status(dto.getStatus())
                 .build();
     }
 
     @Override
-    public NewsFilter toDto(NewsEntity entity) {
-        return NewsFilter
+    public NewsDto toDto(NewsEntity entity) {
+        return NewsDto
                 .builder()
+                .newsId(entity.getNewsId())
                 .title(entity.getTitle())
                 .description(entity.getDescription())
                 .content(entity.getContent())
-                .createdAt(entity.getCreateAt())
-                .updateAt(entity.getUpdateAt())
+                .createdAt(entity.getCreatedAt())
+                .updatedAt(entity.getUpdatedAt())
                 .image(entity.getContent())
+                .user(entity.getUser())
+                .category(entity.getCategory())
+                .status(entity.getStatus())
+                .userId(entity.getUser().getUserId())
                 .build();
     }
 }

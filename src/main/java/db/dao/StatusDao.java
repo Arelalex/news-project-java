@@ -1,6 +1,6 @@
 package db.dao;
 
-import db.dto.StatusFilter;
+import db.dto.StatusDto;
 import db.entity.StatusEntity;
 
 import java.sql.Connection;
@@ -11,5 +11,5 @@ public interface StatusDao<K, E> extends Dao<K, StatusEntity> {
 
     Optional<E> findById(K id, Connection connection);
 
-    List<E> findAllByFilter(StatusFilter filter);
+    List<E> findAllByFilter(StatusDto filter);
 }

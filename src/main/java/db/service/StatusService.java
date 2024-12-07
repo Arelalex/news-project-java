@@ -1,20 +1,20 @@
 package db.service;
 
-import db.dto.StatusFilter;
+import db.dto.StatusDto;
 
 import java.util.List;
 
 public interface StatusService {
 
-    StatusFilter findById(Integer id);
+    StatusDto findById(Integer id);
 
-    List<StatusFilter> findAll();
+    List<StatusDto> findAll();
 
-    StatusFilter save(StatusFilter dto);
+    StatusDto save(StatusDto dto);
 
-    StatusFilter update(StatusFilter dto);
+    StatusDto update(StatusDto dto);
 
-    void delete(StatusFilter dto);
+    void delete(StatusDto dto);
 
-    List<StatusFilter> findAllByFilter(StatusFilter filter);
+    List<StatusDto> findAllByFilter(StatusDto filter);
 }

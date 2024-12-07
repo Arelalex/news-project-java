@@ -1,6 +1,6 @@
 package db.dao;
 
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
 
 import java.sql.Connection;
@@ -11,5 +11,5 @@ public interface PortalUserDao<K, E> extends Dao<K, E> {
 
     Optional<PortalUserEntity> findById(K id, Connection connection);
 
-    List<PortalUserEntity> findAllByFilter(PortalUserFilter filter);
+    List<PortalUserEntity> findAllByFilter(PortalUserDto filter);
 }

@@ -1,7 +1,5 @@
 package db.entity;
 
-import db.dto.PortalUserFilter;
-import db.enums.Statuses;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -15,23 +13,23 @@ import java.time.LocalDateTime;
 @Builder
 public class NewsEntity {
 
-    private Integer id;
+    private Long newsId;
     private String title;
     private String description;
     private String content;
-    private LocalDateTime createAt;
-    private LocalDateTime updateAt;
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
     private String image;
     private PortalUserEntity user;
     private CategoryEntity category;
     private StatusEntity status;
 
-    public NewsEntity(String title, String description, String content, LocalDateTime createAt, LocalDateTime updateAt, String image, PortalUserEntity user, CategoryEntity category, StatusEntity status) {
+    public NewsEntity(String title, String description, String content, LocalDateTime createdAt, LocalDateTime updatedAt, String image, PortalUserEntity user, CategoryEntity category, StatusEntity status) {
         this.title = title;
         this.description = description;
         this.content = content;
-        this.createAt = createAt;
-        this.updateAt = updateAt;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
         this.image = image;
         this.user = user;
         this.category = category;
