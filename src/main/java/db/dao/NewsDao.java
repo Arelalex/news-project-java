@@ -1,6 +1,6 @@
 package db.dao;
 
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
 
 import java.sql.Connection;
 import java.util.List;
@@ -10,7 +10,7 @@ public interface NewsDao<K, E> extends Dao<K, E> {
 
     Optional<E> findById(K id, Connection connection);
 
-    List<E> findAllByFilter(NewsFilter filter);
+    List<E> findAllByFilter(NewsDto filter);
 
     List<E> findByCategoryId(Integer categoryId);
 }

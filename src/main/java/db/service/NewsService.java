@@ -1,22 +1,22 @@
 package db.service;
 
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
 
 import java.util.List;
 
 public interface NewsService {
 
-    NewsFilter findById(Long id);
+    NewsDto findById(Long id);
 
-    List<NewsFilter> findAll();
+    List<NewsDto> findAll();
 
-    NewsFilter save(NewsFilter dto);
+    NewsDto save(NewsDto dto);
 
-    NewsFilter update(NewsFilter dto);
+    NewsDto update(NewsDto dto);
 
-    void delete(NewsFilter dto);
+    void delete(NewsDto dto);
 
-    List<NewsFilter> findAllByFilter(NewsFilter filter);
+    List<NewsDto> findAllByFilter(NewsDto filter);
 
-    List<NewsFilter> findByCategoryId(Integer categoryId);
+    List<NewsDto> findByCategoryId(Integer categoryId);
 }

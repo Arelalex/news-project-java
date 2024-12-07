@@ -1,8 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.PortalUserDaoImpl;
-import db.dto.PortalUserFilter;
-import db.entity.PortalUserEntity;
+import db.dto.PortalUserDto;
 import db.mapper.PortalUserMapper;
 import db.mapper.impl.PortalUserMapperImpl;
 import db.service.PortalUserService;
@@ -26,21 +25,22 @@ public class PortalUserServiceImpl implements PortalUserService {
     }
 
     @Override
-    public PortalUserFilter findById(Integer id) {
+    public PortalUserDto findById(Integer id) {
         return portalUserDao.findById(id)
-                .map(user -> PortalUserFilter.builder()
-                        .id(user.getId())
+                .map(user -> PortalUserDto.builder()
+                        .userId(user.getUserId())
                         .firstName(user.getFirstName())
                         .lastName(user.getLastName())
                         .nickname(user.getNickname())
                         .email(user.getEmail())
+                        .role(user.getRole())
                         .build()
                 )
                 .orElse(null);
     }
 
     @Override
-    public List<PortalUserFilter> findAll() {
+    public List<PortalUserDto> findAll() {
         return portalUserDao.findAll()
                 .stream()
                 .map(portalUserMapper::toDto)
@@ -48,17 +48,17 @@ public class PortalUserServiceImpl implements PortalUserService {
     }
 
     @Override
-    public PortalUserFilter save(PortalUserFilter portalUserFilter) {
+    public PortalUserDto save(PortalUserDto portalUserDto) {
         return null;
     }
 
     @Override
-    public PortalUserFilter update(PortalUserFilter portalUserFilter) {
+    public PortalUserDto update(PortalUserDto portalUserDto) {
         return null;
     }
 
     @Override
-    public void delete(PortalUserFilter portalUserFilter) {
+    public void delete(PortalUserDto portalUserDto) {
 
     }
 }

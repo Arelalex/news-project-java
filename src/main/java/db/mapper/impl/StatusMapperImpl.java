@@ -1,6 +1,6 @@
 package db.mapper.impl;
 
-import db.dto.StatusFilter;
+import db.dto.StatusDto;
 import db.entity.StatusEntity;
 import db.enums.Statuses;
 import db.mapper.StatusMapper;
@@ -20,7 +20,7 @@ public class StatusMapperImpl implements StatusMapper {
     }
 
     @Override
-    public StatusEntity toEntity(StatusFilter dto) {
+    public StatusEntity toEntity(StatusDto dto) {
         return StatusEntity
                 .builder()
                 .status(Statuses.valueOf(dto.getStatus()))
@@ -28,8 +28,8 @@ public class StatusMapperImpl implements StatusMapper {
     }
 
     @Override
-    public StatusFilter toDto(StatusEntity entity) {
-        return StatusFilter
+    public StatusDto toDto(StatusEntity entity) {
+        return StatusDto
                 .builder()
                 .status(String.valueOf(entity.getStatus()))
                 .build();

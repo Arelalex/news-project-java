@@ -1,7 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.RoleDaoImpl;
-import db.dto.RoleFilter;
+import db.dto.RoleDto;
 import db.mapper.impl.RoleMapperImpl;
 import db.service.RoleService;
 
@@ -24,9 +24,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleFilter findById(Integer id) {
+    public RoleDto findById(Integer id) {
         return roleDao.findById(id)
-                .map(role -> RoleFilter.builder()
+                .map(role -> RoleDto.builder()
                         .role(String.valueOf(role.getRole()))
                         .build()
                 )
@@ -34,9 +34,9 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public List<RoleFilter> findAll() {
+    public List<RoleDto> findAll() {
         return roleDao.findAll().stream()
-                .map(role -> RoleFilter.builder()
+                .map(role -> RoleDto.builder()
                         .role(String.valueOf(role.getRole()))
                         .build()
                 )
@@ -44,22 +44,22 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public RoleFilter save(RoleFilter portalUserFilter) {
+    public RoleDto save(RoleDto portalUserFilter) {
         return null;
     }
 
     @Override
-    public RoleFilter update(RoleFilter portalUserFilter) {
+    public RoleDto update(RoleDto portalUserFilter) {
         return null;
     }
 
     @Override
-    public void delete(RoleFilter portalUserFilter) {
+    public void delete(RoleDto portalUserFilter) {
 
     }
 
     @Override
-    public List<RoleFilter> findAllByFilter(RoleFilter filter) {
+    public List<RoleDto> findAllByFilter(RoleDto filter) {
         return roleDao.findAllByFilter(filter)
                 .stream()
                 .map(roleMapper::toDto)

@@ -1,21 +1,21 @@
 package db.service;
 
-import db.dto.CommentFilter;
+import db.dto.CommentDto;
 
 import java.util.List;
 
 public interface CommentService {
 
-    CommentFilter findById(Long id);
+    CommentDto findById(Long id);
 
-    List<CommentFilter> findAll();
+    List<CommentDto> findAll();
 
-    CommentFilter save(CommentFilter dto);
+    CommentDto save(CommentDto dto);
 
-    CommentFilter update(CommentFilter dto);
+    CommentDto update(CommentDto dto);
 
-    void delete(CommentFilter dto);
+    void delete(CommentDto dto);
 
-    List<CommentFilter> findAllByFilter(CommentFilter filter);
+    List<CommentDto> findAllByFilter(CommentDto filter);
 
 }

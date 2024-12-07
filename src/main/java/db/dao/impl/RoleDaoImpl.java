@@ -1,7 +1,7 @@
 package db.dao.impl;
 
 import db.dao.RoleDao;
-import db.dto.RoleFilter;
+import db.dto.RoleDto;
 import db.entity.RoleEntity;
 import db.enums.Roles;
 import db.exception.*;
@@ -87,7 +87,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                roleEntity.setId(generatedKeys.getInt("id"));
+                roleEntity.setRoleId(generatedKeys.getInt("id"));
             }
             return roleEntity;
         } catch (SQLException throwables) {
@@ -100,7 +100,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, roleEntity.getRole().name());
-            preparedStatement.setInt(2, roleEntity.getId());
+            preparedStatement.setInt(2, roleEntity.getRoleId());
 
 
             preparedStatement.executeUpdate();
@@ -152,7 +152,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
     }
 
     @Override
-    public List<RoleEntity> findAllByFilter(RoleFilter filter) {
+    public List<RoleEntity> findAllByFilter(RoleDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getRole() != null) {

@@ -1,7 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.NewsDaoImpl;
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
 import db.mapper.NewsMapper;
 import db.mapper.impl.NewsMapperImpl;
 import db.service.NewsService;
@@ -26,22 +26,27 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsFilter findById(Long id) {
+    public NewsDto findById(Long id) {
         return newsDao.findById(id)
-                .map(news -> NewsFilter.builder()
+                .map(news -> NewsDto.builder()
+                        .newsId(news.getNewsId())
                         .title(news.getTitle())
                         .description(news.getDescription())
                         .content(news.getContent())
-                        .createdAt(news.getCreateAt())
-                        .updateAt(news.getUpdateAt())
+                        .createdAt(news.getCreatedAt())
+                        .updatedAt(news.getUpdatedAt())
                         .image(news.getImage())
+                        .user(news.getUser())
+                        .category(news.getCategory())
+                        .status(news.getStatus())
+                        .userId(news.getUser().getUserId())
                         .build()
                 )
                 .orElse(null);
     }
 
     @Override
-    public List<NewsFilter> findAll() {
+    public List<NewsDto> findAll() {
         return newsDao.findAll()
                 .stream()
                 .map(entity -> newsMapper.toDto(entity))
@@ -49,22 +54,22 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public NewsFilter save(NewsFilter dto) {
+    public NewsDto save(NewsDto dto) {
         return null;
     }
 
     @Override
-    public NewsFilter update(NewsFilter dto) {
+    public NewsDto update(NewsDto dto) {
         return null;
     }
 
     @Override
-    public void delete(NewsFilter dto) {
+    public void delete(NewsDto dto) {
 
     }
 
     @Override
-    public List<NewsFilter> findAllByFilter(NewsFilter filter) {
+    public List<NewsDto> findAllByFilter(NewsDto filter) {
         return newsDao.findAllByFilter(filter)
                 .stream()
                 .map(newsMapper::toDto)
@@ -72,10 +77,17 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public List<NewsFilter> findByCategoryId(Integer categoryId) {
+    public List<NewsDto> findByCategoryId(Integer categoryId) {
         return newsDao.findByCategoryId(categoryId)
                 .stream()
-                .map(news -> new NewsFilter(news.getTitle(), news.getDescription()))
+                .map(news -> NewsDto.builder()
+                        .newsId(news.getNewsId())
+                        .title(news.getTitle())
+                        .description(news.getDescription())
+                        .content(news.getContent())
+                        .createdAt(news.getCreatedAt())
+                        .updatedAt(news.getUpdatedAt())
+                        .build())
                 .collect(Collectors.toList());
     }
 }

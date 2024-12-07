@@ -1,7 +1,7 @@
 package db.mapper;
 
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
 
-public interface PortalUserMapper extends BaseMapper<PortalUserEntity, PortalUserFilter> {
+public interface PortalUserMapper extends BaseMapper<PortalUserEntity, PortalUserDto> {
 }

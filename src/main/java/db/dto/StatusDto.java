@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class StatusFilter {
+public class StatusDto {
     private Integer limit;
     private Integer offset;
     private String status;

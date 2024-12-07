@@ -1,7 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.CommentDaoImpl;
-import db.dto.CommentFilter;
+import db.dto.CommentDto;
 import db.mapper.CommentMapper;
 import db.mapper.impl.CommentMapperImpl;
 import db.service.CommentService;
@@ -25,19 +25,19 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentFilter findById(Long id) {
+    public CommentDto findById(Long id) {
         return commentDao.findById(id)
-                .map(comment -> CommentFilter.builder()
+                .map(comment -> CommentDto.builder()
                         .content(comment.getContent())
-                        .createdAt(comment.getCreateAt())
-                        .updateAt(comment.getUpdateAt())
+                        .createdAt(comment.getCreatedAt())
+                        .updatedAt(comment.getUpdatedAt())
                         .build()
                 )
                 .orElse(null);
     }
 
     @Override
-    public List<CommentFilter> findAll() {
+    public List<CommentDto> findAll() {
         return commentDao.findAll()
                 .stream()
                 .map(commentMapper::toDto)
@@ -45,25 +45,25 @@ public class CommentServiceImpl implements CommentService {
     }
 
     @Override
-    public CommentFilter save(CommentFilter dto) {
+    public CommentDto save(CommentDto dto) {
         return null;
     }
 
     @Override
-    public CommentFilter update(CommentFilter dto) {
+    public CommentDto update(CommentDto dto) {
         return null;
     }
 
     @Override
-    public void delete(CommentFilter dto) {
+    public void delete(CommentDto dto) {
 
     }
 
     @Override
-    public List<CommentFilter> findAllByFilter(CommentFilter filter) {
-        return commentDao.findAll()
+    public List<CommentDto> findAllByFilter(CommentDto filter) {
+        return commentDao.findAllByFilter(filter)
                 .stream()
-                .map(entity -> commentMapper.toDto(entity))
+                .map(commentMapper::toDto)
                 .toList();
     }
 }

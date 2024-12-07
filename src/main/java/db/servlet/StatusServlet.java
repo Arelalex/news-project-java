@@ -2,6 +2,7 @@ package db.servlet;
 
 import db.dao.impl.StatusDaoImpl;
 import db.service.impl.StatusServiceImpl;
+import db.util.JspHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -9,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
 
 @WebServlet("/statuses")
 public class StatusServlet extends HttpServlet {
@@ -19,19 +19,9 @@ public class StatusServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        resp.setContentType("text/html");
-        resp.setCharacterEncoding(StandardCharsets.UTF_8.name());
-
-        try (var printWriter = resp.getWriter()) {
-            printWriter.write("<h1>Статусы новостей и комментариев</h1>");
-            printWriter.write("<ul>");
-            statusService.findAll().forEach(statusFilter -> printWriter.write("""
-                    <li>
-                        %s
-                    </li>
-                    """.formatted(statusFilter.getStatus())));
-            printWriter.write("</ul>");
-        }
+        req.setAttribute("statuses", statusService.findAll());
+        req.getRequestDispatcher(JspHelper.getPath("statuses"))
+                .forward(req, resp);
     }
 }
 

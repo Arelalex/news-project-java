@@ -1,6 +1,6 @@
 package db.mapper.impl;
 
-import db.dto.RoleFilter;
+import db.dto.RoleDto;
 import db.entity.RoleEntity;
 import db.enums.Roles;
 import db.mapper.RoleMapper;
@@ -20,7 +20,7 @@ public class RoleMapperImpl implements RoleMapper {
     }
 
     @Override
-    public RoleEntity toEntity(RoleFilter dto) {
+    public RoleEntity toEntity(RoleDto dto) {
         return RoleEntity
                 .builder()
                 .role(Roles.valueOf(dto.getRole()))
@@ -28,8 +28,8 @@ public class RoleMapperImpl implements RoleMapper {
     }
 
     @Override
-    public RoleFilter toDto(RoleEntity entity) {
-        return RoleFilter
+    public RoleDto toDto(RoleEntity entity) {
+        return RoleDto
                 .builder()
                 .role(String.valueOf(entity.getRole()))
                 .build();

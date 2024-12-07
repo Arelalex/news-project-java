@@ -1,7 +1,7 @@
 package db.dao.impl;
 
 import db.dao.NewsDao;
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
 import db.entity.NewsEntity;
 import db.exception.*;
 import db.util.ConnectionManager;
@@ -116,18 +116,18 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
             preparedStatement.setString(1, newsEntity.getTitle());
             preparedStatement.setString(2, newsEntity.getDescription());
             preparedStatement.setString(3, newsEntity.getContent());
-            preparedStatement.setDate(4, Date.valueOf(newsEntity.getCreateAt().toLocalDate()));
-            preparedStatement.setDate(5, Date.valueOf(newsEntity.getUpdateAt().toLocalDate()));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(newsEntity.getCreatedAt()));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(newsEntity.getUpdatedAt()));
             preparedStatement.setString(6, newsEntity.getImage());
-            preparedStatement.setInt(7, newsEntity.getUser().getId());
-            preparedStatement.setInt(8, newsEntity.getCategory().getId());
-            preparedStatement.setInt(9, newsEntity.getStatus().getId());
+            preparedStatement.setInt(7, newsEntity.getUser().getUserId());
+            preparedStatement.setInt(8, newsEntity.getCategory().getCategoryId());
+            preparedStatement.setInt(9, newsEntity.getStatus().getStatusId());
 
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                newsEntity.setId(generatedKeys.getInt("id"));
+                newsEntity.setNewsId(generatedKeys.getLong("news_id"));
             }
             return newsEntity;
         } catch (SQLException throwables) {
@@ -142,14 +142,14 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
             preparedStatement.setString(1, newsEntity.getTitle());
             preparedStatement.setString(2, newsEntity.getDescription());
             preparedStatement.setString(3, newsEntity.getContent());
-            preparedStatement.setDate(4, Date.valueOf(newsEntity.getCreateAt().toLocalDate()));
-            preparedStatement.setDate(5, Date.valueOf(newsEntity.getUpdateAt().toLocalDate()));
+            preparedStatement.setTimestamp(4, Timestamp.valueOf(newsEntity.getCreatedAt()));
+            preparedStatement.setTimestamp(5, Timestamp.valueOf(newsEntity.getUpdatedAt()));
             preparedStatement.setString(6, newsEntity.getImage());
-            preparedStatement.setInt(7, newsEntity.getUser().getId());
-            preparedStatement.setInt(8, newsEntity.getCategory().getId());
-            preparedStatement.setInt(9, newsEntity.getStatus().getId());
+            preparedStatement.setInt(7, newsEntity.getUser().getUserId());
+            preparedStatement.setInt(8, newsEntity.getCategory().getCategoryId());
+            preparedStatement.setInt(9, newsEntity.getStatus().getStatusId());
 
-            preparedStatement.setInt(10, newsEntity.getId());
+            preparedStatement.setLong(10, newsEntity.getNewsId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -183,7 +183,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
     }
 
     @Override
-    public List<NewsEntity> findAllByFilter(NewsFilter filter) {
+    public List<NewsEntity> findAllByFilter(NewsDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getTitle() != null) {
@@ -191,33 +191,29 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
             parameters.add("%" + filter.getTitle() + "%");
         }
         if (filter.getDescription() != null) {
-            whereSql.add("n.description = ?");
+            whereSql.add("n.description LIKE ?");
             parameters.add("%" + filter.getDescription() + "%");
         }
         if (filter.getContent() != null) {
-            whereSql.add("n.content = ?");
+            whereSql.add("n.content LIKE ?");
             parameters.add("%" + filter.getContent() + "%");
         }
         if (filter.getCreatedAt() != null) {
-            whereSql.add("n.created_at = ?");
+            whereSql.add("n.created_at LIKE ?");
             parameters.add("%" + filter.getCreatedAt() + "%");
         }
-        if (filter.getUpdateAt() != null) {
-            whereSql.add("n.updated_at = ?");
-            parameters.add("%" + filter.getUpdateAt() + "%");
+        if (filter.getUpdatedAt() != null) {
+            whereSql.add("n.updated_at LIKE ?");
+            parameters.add("%" + filter.getUpdatedAt() + "%");
         }
 
-        if (filter.getUser() != null) {
+        if (filter.getUserId() != null) {
             whereSql.add("n.user_id = ?");
-            parameters.add(filter.getUser());
+            parameters.add(filter.getUserId());
         }
         if (filter.getCategory() != null) {
             whereSql.add("n.category_id = ?");
             parameters.add(filter.getCategory());
-        }
-        if (filter.getStatus() != null) {
-            whereSql.add("n.status_id = ?");
-            parameters.add(filter.getStatus());
         }
 
         parameters.add(filter.getLimit());
@@ -264,6 +260,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(FIND_BY_CATEGORY_ID)) {
             preparedStatement.setInt(1, categoryId);
+
             try (var resultSet = preparedStatement.executeQuery()) {
                 List<NewsEntity> news = new ArrayList<>();
                 while (resultSet.next()) {
@@ -278,7 +275,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
 
     private NewsEntity buildNews(ResultSet resultSet) throws SQLException {
         return new NewsEntity(
-                resultSet.getInt(NEWS_ID),
+                resultSet.getLong(NEWS_ID),
                 resultSet.getString(NEWS_TITLE),
                 resultSet.getString(NEWS_DESCRIPTION),
                 resultSet.getString(NEWS_CONTENT),

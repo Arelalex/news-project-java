@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class RoleEntity {
-    private Integer id;
+    private Integer roleId;
     private Roles role;
 
     public RoleEntity(Roles role) {

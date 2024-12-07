@@ -1,7 +1,7 @@
 package db.service.impl;
 
 import db.dao.impl.StatusDaoImpl;
-import db.dto.StatusFilter;
+import db.dto.StatusDto;
 import db.mapper.StatusMapper;
 import db.mapper.impl.StatusMapperImpl;
 import db.service.StatusService;
@@ -25,14 +25,14 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public StatusFilter findById(Integer id) {
+    public StatusDto findById(Integer id) {
         return null;
     }
 
     @Override
-    public List<StatusFilter> findAll() {
+    public List<StatusDto> findAll() {
         return statusDao.findAll().stream()
-                .map(status -> StatusFilter.builder()
+                .map(status -> StatusDto.builder()
                         .status(String.valueOf(status.getStatus()))
                         .build()
                 )
@@ -40,22 +40,22 @@ public class StatusServiceImpl implements StatusService {
     }
 
     @Override
-    public StatusFilter save(StatusFilter dto) {
+    public StatusDto save(StatusDto dto) {
         return null;
     }
 
     @Override
-    public StatusFilter update(StatusFilter dto) {
+    public StatusDto update(StatusDto dto) {
         return null;
     }
 
     @Override
-    public void delete(StatusFilter dto) {
+    public void delete(StatusDto dto) {
 
     }
 
     @Override
-    public List<StatusFilter> findAllByFilter(StatusFilter filter) {
+    public List<StatusDto> findAllByFilter(StatusDto filter) {
         return statusDao.findAllByFilter(filter)
                 .stream()
                 .map(statusMapper::toDto)

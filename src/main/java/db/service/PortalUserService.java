@@ -1,19 +1,19 @@
 package db.service;
 
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 
 import java.util.List;
 
 public interface PortalUserService {
 
-    PortalUserFilter findById(Integer id);
+    PortalUserDto findById(Integer id);
 
-    List<PortalUserFilter> findAll();
+    List<PortalUserDto> findAll();
 
-    PortalUserFilter save(PortalUserFilter portalUserFilter);
+    PortalUserDto save(PortalUserDto portalUserDto);
 
-    PortalUserFilter update(PortalUserFilter portalUserFilter);
+    PortalUserDto update(PortalUserDto portalUserDto);
 
-    void delete(PortalUserFilter portalUserFilter);
+    void delete(PortalUserDto portalUserDto);
 
 }

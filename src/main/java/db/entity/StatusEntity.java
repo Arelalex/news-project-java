@@ -11,7 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @Builder
 public class StatusEntity {
-    private Integer id;
+    private Integer statusId;
     private Statuses status;
 
     public StatusEntity(Statuses status) {

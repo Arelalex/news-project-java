@@ -9,13 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class PortalUserFilter {
-    private Integer id;
-    private String firstName;
-    private String lastName;
-    private String nickname;
-    private String email;
+public class RoleDto {
     private Integer limit;
     private Integer offset;
+    private String role;
 
 }

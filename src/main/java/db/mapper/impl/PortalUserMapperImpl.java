@@ -1,7 +1,8 @@
 package db.mapper.impl;
 
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
+import db.enums.Roles;
 import db.mapper.PortalUserMapper;
 
 public class PortalUserMapperImpl implements PortalUserMapper {
@@ -19,24 +20,30 @@ public class PortalUserMapperImpl implements PortalUserMapper {
     }
 
     @Override
-    public PortalUserEntity toEntity(PortalUserFilter dto) {
+    public PortalUserEntity toEntity(PortalUserDto dto) {
         return PortalUserEntity
                 .builder()
+                .userId(dto.getUserId())
                 .firstName(dto.getFirstName())
                 .lastName(dto.getLastName())
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
+                .password(dto.getPassword())
+                .role(dto.getRole())
                 .build();
     }
 
     @Override
-    public PortalUserFilter toDto(PortalUserEntity portalUser) {
-        return PortalUserFilter
+    public PortalUserDto toDto(PortalUserEntity portalUser) {
+        return PortalUserDto
                 .builder()
+                .userId(portalUser.getUserId())
                 .firstName(portalUser.getFirstName())
                 .lastName(portalUser.getLastName())
                 .nickname(portalUser.getNickname())
                 .email(portalUser.getEmail())
+                .password(portalUser.getPassword())
+                .role(portalUser.getRole())
                 .build();
     }
 

@@ -1,20 +1,20 @@
 package db.service;
 
-import db.dto.RoleFilter;
+import db.dto.RoleDto;
 
 import java.util.List;
 
 public interface RoleService {
 
-    RoleFilter findById(Integer id);
+    RoleDto findById(Integer id);
 
-    List<RoleFilter> findAll();
+    List<RoleDto> findAll();
 
-    RoleFilter save(RoleFilter portalUserFilter);
+    RoleDto save(RoleDto portalUserFilter);
 
-    RoleFilter update(RoleFilter portalUserFilter);
+    RoleDto update(RoleDto portalUserFilter);
 
-    void delete(RoleFilter portalUserFilter);
+    void delete(RoleDto portalUserFilter);
 
-    List<RoleFilter> findAllByFilter(RoleFilter filter);
+    List<RoleDto> findAllByFilter(RoleDto filter);
 }

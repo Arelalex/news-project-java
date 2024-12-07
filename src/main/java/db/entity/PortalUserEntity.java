@@ -1,5 +1,6 @@
 package db.entity;
 
+import db.enums.Roles;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,17 +12,17 @@ import lombok.NoArgsConstructor;
 @Builder
 public class PortalUserEntity {
 
-    private Integer id;
+    private Integer userId;
     private String firstName;
     private String lastName;
     private String nickname;
     private String email;
     private String password;
     private String image;
-    private RoleEntity role;
+    private Roles role;
     // private List<News> news;
 
-    public PortalUserEntity(String firstName, String lastName, String nickname, String email, String password, String image, RoleEntity role) {
+    public PortalUserEntity(String firstName, String lastName, String nickname, String email, String password, String image, Roles role) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.nickname = nickname;
