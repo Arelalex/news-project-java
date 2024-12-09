@@ -2,11 +2,11 @@ package db.mapper.impl;
 
 import db.dto.CreatePortalUserDto;
 import db.entity.PortalUserEntity;
-import db.enums.Roles;
 import db.mapper.CreateUserMapper;
 
 public class CreateUserMapperImpl implements CreateUserMapper {
 
+    private static final String IMAGE_FOLDER = "users/";
     private static CreateUserMapperImpl instance;
 
     private CreateUserMapperImpl() {
@@ -28,7 +28,7 @@ public class CreateUserMapperImpl implements CreateUserMapper {
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
                 .password(dto.getPassword())
-                .image(null) //исправить когда буду реализовывать картинки
+                .image(IMAGE_FOLDER + dto.getImage().getSubmittedFileName())
                 .role(dto.getRole())
                 .build();
     }

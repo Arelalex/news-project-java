@@ -15,8 +15,8 @@ import java.io.IOException;
 @WebServlet("/news/details")
 public class NewsDetailsServlet extends HttpServlet {
 
-    NewsServiceImpl newsService = NewsServiceImpl.getInstance();
-    CommentServiceImpl commentService = CommentServiceImpl.getInstance();
+    private final NewsServiceImpl newsService = NewsServiceImpl.getInstance();
+    private final CommentServiceImpl commentService = CommentServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

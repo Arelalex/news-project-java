@@ -1,6 +1,7 @@
 package db.dto;
 
 import db.enums.Roles;
+import jakarta.servlet.http.Part;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,7 +17,7 @@ public class CreatePortalUserDto {
     String nickname;
     String email;
     String password;
-    String image;
+    Part image;
     Roles role;
 
 }

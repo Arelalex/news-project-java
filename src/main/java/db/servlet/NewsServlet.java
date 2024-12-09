@@ -13,7 +13,7 @@ import java.io.IOException;
 @WebServlet("/news")
 public class NewsServlet extends HttpServlet {
 
-    NewsServiceImpl newsService = NewsServiceImpl.getInstance();
+    private final NewsServiceImpl newsService = NewsServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {

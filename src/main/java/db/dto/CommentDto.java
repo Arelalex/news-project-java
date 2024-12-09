@@ -26,17 +26,19 @@ public class CommentDto {
     private PortalUserEntity user;
     private StatusEntity status;
 
+    private final String DATE_PATTERN = "dd.MM.yyyy HH:mm";
+
     public CommentDto(Long newsId) {
         this.newsId = newsId;
     }
 
     public String getFormattedCreatedAt() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         return createdAt.format(formatter);
     }
 
     public String getFormattedUpdatedAt() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern(DATE_PATTERN);
         return updatedAt.format(formatter);
     }
 }

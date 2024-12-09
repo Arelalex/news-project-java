@@ -6,28 +6,32 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<form action="${pageContext.request.contextPath}/registration" method="post">
+<%--<img src="${pageContext.request.contextPath}/images/users/5.jpg" alt="User image">--%>
+<form action="${pageContext.request.contextPath}/registration" method="post" enctype="multipart/form-data">
     <label for="firstNameId"><strong>Имя:</strong>
-        <input type="text" name="firstName" id="firstNameId">
+        <input type="text" name="firstName" id="firstNameId" required>
     </label><br><br>
     <label for="lastNameId"><strong>Фамилия:</strong>
-        <input type="text" name="lastName" id="lastNameId">
+        <input type="text" name="lastName" id="lastNameId" required>
     </label><br><br>
     <label for="nicknameId"><strong>Никнейм:</strong>
-        <input type="text" name="nickname" id="nicknameId">
+        <input type="text" name="nickname" id="nicknameId" required>
     </label><br><br>
     <label for="emailId"><strong>Email:</strong>
-        <input type="text" name="email" id="emailId">
+        <input type="text" name="email" id="emailId" required>
     </label><br><br>
-    <label for="passwordId"><strong>Password:</strong>
-        <input type="password" name="password" id="passwordId">
+    <label for="passwordId"><strong>Пароль:</strong>
+        <input type="password" name="password" id="passwordId" required>
     </label><br><br>
-    <label for="roleId"><strong>Role:</strong>
+    <label for="roleId"><strong>Роль:</strong>
         <select name="role" id="roleId">
             <c:forEach var="role" items="${requestScope.roles}">
                 <option value="${role.name()}">${role.name()}</option>
             </c:forEach>
         </select>
+    </label><br><br>
+    <label for="imageId"><strong>Аватарка:</strong>
+        <input type="file" name="image" id="imageId">
     </label><br><br>
     <button type="submit">Send</button>
 </form>
