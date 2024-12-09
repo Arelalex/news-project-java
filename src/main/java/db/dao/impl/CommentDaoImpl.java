@@ -1,7 +1,7 @@
 package db.dao.impl;
 
 import db.dao.CommentDao;
-import db.dto.CommentFilter;
+import db.dto.CommentDto;
 import db.entity.CommentEntity;
 import db.exception.*;
 import db.util.ConnectionManager;
@@ -43,15 +43,18 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
                     WHERE comment_id = ?
             """;
     private static final String FIND_ALL_SQL = """
-            SELECT comment_id,
-            content,
-            created_at,
-            updated_at,
-            attachment,
-            news_id,
-            user_id,
-            status_id
-            FROM comment
+            SELECT c.comment_id,
+                   c.content,
+                   c.created_at,
+                   c.updated_at,
+                   c.attachment,
+                n.news_id,
+                u.user_id,
+                s.status_id
+                     FROM comment c
+                     LEFT JOIN news n ON c.news_id = n.news_id
+                     LEFT JOIN portal_user u ON c.user_id = u.user_id
+                     LEFT JOIN status s ON c.status_id = s.status_id
             """;
     private static final String FIND_BY_ID_SQL = FIND_ALL_SQL + """
             WHERE comment.comment_id = ?
@@ -88,18 +91,18 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
             preparedStatement.setString(1, entity.getContent());
-            preparedStatement.setDate(2, Date.valueOf(entity.getCreateAt().toLocalDate()));
-            preparedStatement.setDate(3, Date.valueOf(entity.getUpdateAt().toLocalDate()));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(entity.getCreatedAt()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(entity.getUpdatedAt()));
             preparedStatement.setString(4, entity.getAttachment());
-            preparedStatement.setLong(5, entity.getNews().getId());
-            preparedStatement.setInt(6, entity.getUser().getId());
-            preparedStatement.setInt(7, entity.getStatus().getId());
+            preparedStatement.setLong(5, entity.getNews().getNewsId());
+            preparedStatement.setInt(6, entity.getUser().getUserId());
+            preparedStatement.setInt(7, entity.getStatus().getStatusId());
 
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                entity.setId(generatedKeys.getLong("comment_id"));
+                entity.setCommentId(generatedKeys.getLong("comment_id"));
             }
             return entity;
         } catch (SQLException throwables) {
@@ -112,14 +115,14 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, entity.getContent());
-            preparedStatement.setDate(2, Date.valueOf(entity.getCreateAt().toLocalDate()));
-            preparedStatement.setDate(3, Date.valueOf(entity.getUpdateAt().toLocalDate()));
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(entity.getCreatedAt()));
+            preparedStatement.setTimestamp(3, Timestamp.valueOf(entity.getUpdatedAt()));
             preparedStatement.setString(4, entity.getAttachment());
-            preparedStatement.setLong(5, entity.getNews().getId());
-            preparedStatement.setInt(6, entity.getUser().getId());
-            preparedStatement.setInt(7, entity.getStatus().getId());
+            preparedStatement.setLong(5, entity.getNews().getNewsId());
+            preparedStatement.setInt(6, entity.getUser().getUserId());
+            preparedStatement.setInt(7, entity.getStatus().getStatusId());
 
-            preparedStatement.setLong(8, entity.getId());
+            preparedStatement.setLong(8, entity.getCommentId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -153,21 +156,35 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
     }
 
     @Override
-    public List<CommentEntity> findAllByFilter(CommentFilter filter) {
+    public List<CommentEntity> findAllByFilter(CommentDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getContent() != null) {
-            whereSql.add("content LIKE ?");
+            whereSql.add("c.content LIKE ?");
             parameters.add("%" + filter.getContent() + "%");
         }
         if (filter.getCreatedAt() != null) {
-            whereSql.add("created_at = ?");
+            whereSql.add("c.created_at = ?");
             parameters.add("%" + filter.getCreatedAt() + "%");
         }
-        if (filter.getUpdateAt() != null) {
-            whereSql.add("updated_at = ?");
-            parameters.add("%" + filter.getUpdateAt() + "%");
+        if (filter.getUpdatedAt() != null) {
+            whereSql.add("c.updated_at = ?");
+            parameters.add("%" + filter.getUpdatedAt() + "%");
         }
+
+        if (filter.getNewsId() != null) {
+            whereSql.add("c.news_id = ?");
+            parameters.add(filter.getNewsId());
+        }
+        if (filter.getUser() != null) {
+            whereSql.add("c.user_id = ?");
+            parameters.add(filter.getUser());
+        }
+        if (filter.getStatus() != null) {
+            whereSql.add("c.status_id = ?");
+            parameters.add(filter.getStatus());
+        }
+
         parameters.add(filter.getLimit());
         parameters.add(filter.getOffset());
         var where = whereSql.stream()

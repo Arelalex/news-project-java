@@ -1,6 +1,6 @@
 package db.servlet;
 
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,10 +17,10 @@ public class TestSessionServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var session = req.getSession();
-        var user = (PortalUserFilter) session.getAttribute(USER);
+        var user = (PortalUserDto) session.getAttribute(USER);
         if (user == null) {
-            user = PortalUserFilter.builder().
-                    id(1)
+            user = PortalUserDto.builder().
+                    userId(1)
                     // .email("test@gmail.com")
                     .build();
             session.setAttribute(USER, user);

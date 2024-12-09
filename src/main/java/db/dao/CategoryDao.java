@@ -1,6 +1,6 @@
 package db.dao;
 
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 
 import java.sql.Connection;
 import java.util.List;
@@ -10,5 +10,5 @@ public interface CategoryDao<K, E> extends Dao<K, E> {
 
     Optional<E> findById(K id, Connection connection);
 
-    List<E> findAllByFilter(CategoryFilter filter);
+    List<E> findAllByFilter(CategoryDto filter);
 }

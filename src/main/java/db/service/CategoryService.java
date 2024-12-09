@@ -1,20 +1,20 @@
 package db.service;
 
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 
 import java.util.List;
 
 public interface CategoryService {
 
-    CategoryFilter findById(Integer id);
+    CategoryDto findById(Integer id);
 
-    List<CategoryFilter> findAll();
+    List<CategoryDto> findAll();
 
-    CategoryFilter save(CategoryFilter dto);
+    CategoryDto save(CategoryDto dto);
 
-    CategoryFilter update(CategoryFilter dto);
+    CategoryDto update(CategoryDto dto);
 
-    void delete(CategoryFilter dto);
+    void delete(CategoryDto dto);
 
-    List<CategoryFilter> findAllByFilter(CategoryFilter filter);
+    List<CategoryDto> findAllByFilter(CategoryDto filter);
 }

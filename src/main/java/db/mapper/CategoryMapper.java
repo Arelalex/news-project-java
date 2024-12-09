@@ -1,7 +1,7 @@
 package db.mapper;
 
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 import db.entity.CategoryEntity;
 
-public interface CategoryMapper extends BaseMapper<CategoryEntity, CategoryFilter> {
+public interface CategoryMapper extends BaseMapper<CategoryEntity, CategoryDto> {
 }

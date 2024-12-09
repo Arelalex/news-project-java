@@ -1,6 +1,6 @@
 package db.dao;
 
-import db.dto.RoleFilter;
+import db.dto.RoleDto;
 import db.enums.Roles;
 
 import java.sql.Connection;
@@ -11,7 +11,7 @@ public interface RoleDao<K, E> extends Dao<K, E> {
 
     Optional<E> findById(K id, Connection connection);
 
-    List<E> findAllByFilter(RoleFilter filter);
+    List<E> findAllByFilter(RoleDto filter);
 
     Optional<E> findByRole(Roles role, Connection connection);
 }

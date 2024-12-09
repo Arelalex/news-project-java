@@ -1,7 +1,7 @@
 package db.dao.impl;
 
 import db.dao.PortalUserDao;
-import db.dto.PortalUserFilter;
+import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
 import db.exception.*;
 import db.util.ConnectionManager;
@@ -104,13 +104,13 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
             preparedStatement.setString(4, portalUser.getEmail());
             preparedStatement.setString(5, portalUser.getPassword());
             preparedStatement.setString(6, portalUser.getImage());
-            preparedStatement.setInt(7, portalUser.getRole().getId());
+            preparedStatement.setObject(7, portalUser.getRole().getId());
 
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                portalUser.setId(generatedKeys.getInt("id"));
+                portalUser.setUserId(generatedKeys.getInt("user_id"));
             }
             return portalUser;
         } catch (SQLException throwables) {
@@ -128,9 +128,9 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
             preparedStatement.setString(4, portalUser.getEmail());
             preparedStatement.setString(5, portalUser.getPassword());
             preparedStatement.setString(6, portalUser.getImage());
-            preparedStatement.setInt(7, portalUser.getRole().getId());
+            preparedStatement.setObject(7, portalUser.getRole().getId());
 
-            preparedStatement.setInt(8, portalUser.getId());
+            preparedStatement.setInt(8, portalUser.getUserId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -165,7 +165,7 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
     }
 
     @Override
-    public List<PortalUserEntity> findAllByFilter(PortalUserFilter filter) {
+    public List<PortalUserEntity> findAllByFilter(PortalUserDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getFirstName() != null) {
@@ -233,7 +233,7 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
                 resultSet.getString(USER_PASSWORD),
                 resultSet.getString(IMAGE),
                 roleDaoImpl.findById(resultSet.getInt(FOREIGN_ROLE_ID),
-                        resultSet.getStatement().getConnection()).orElse(null)
+                        resultSet.getStatement().getConnection()).orElseThrow().getRole()
         );
     }
 }

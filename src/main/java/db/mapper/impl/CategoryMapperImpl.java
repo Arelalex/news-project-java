@@ -1,6 +1,6 @@
 package db.mapper.impl;
 
-import db.dto.CategoryFilter;
+import db.dto.CategoryDto;
 import db.entity.CategoryEntity;
 import db.mapper.CategoryMapper;
 
@@ -19,19 +19,19 @@ public class CategoryMapperImpl implements CategoryMapper {
     }
 
     @Override
-    public CategoryEntity toEntity(CategoryFilter dto) {
+    public CategoryEntity toEntity(CategoryDto dto) {
         return CategoryEntity
                 .builder()
-                .id(dto.getId())
+                .categoryId(dto.getCategoryId())
                 .category(dto.getCategory())
                 .build();
     }
 
     @Override
-    public CategoryFilter toDto(CategoryEntity entity) {
-        return CategoryFilter
+    public CategoryDto toDto(CategoryEntity entity) {
+        return CategoryDto
                 .builder()
-                .id(entity.getId())
+                .categoryId(entity.getCategoryId())
                 .category(entity.getCategory())
                 .build();
     }

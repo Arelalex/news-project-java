@@ -1,9 +1,8 @@
 package db.dao.impl;
 
 import db.dao.StatusDao;
-import db.dto.StatusFilter;
+import db.dto.StatusDto;
 import db.entity.StatusEntity;
-import db.enums.Roles;
 import db.enums.Statuses;
 import db.exception.DaoExceptionDelete;
 import db.exception.DaoExceptionFindById;
@@ -86,7 +85,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                statusEntity.setId(generatedKeys.getInt("id"));
+                statusEntity.setStatusId(generatedKeys.getInt("id"));
             }
             return statusEntity;
         } catch (SQLException throwables) {
@@ -100,7 +99,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, statusEntity.getStatus().name());
 
-            preparedStatement.setLong(2, statusEntity.getId());
+            preparedStatement.setLong(2, statusEntity.getStatusId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -134,7 +133,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
     }
 
     @Override
-    public List<StatusEntity> findAllByFilter(StatusFilter filter) {
+    public List<StatusEntity> findAllByFilter(StatusDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getStatus() != null) {

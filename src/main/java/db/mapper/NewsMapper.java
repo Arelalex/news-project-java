@@ -1,7 +1,7 @@
 package db.mapper;
 
-import db.dto.NewsFilter;
+import db.dto.NewsDto;
 import db.entity.NewsEntity;
 
-public interface NewsMapper extends BaseMapper<NewsEntity, NewsFilter>{
+public interface NewsMapper extends BaseMapper<NewsEntity, NewsDto>{
 }
