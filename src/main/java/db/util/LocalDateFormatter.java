@@ -23,6 +23,7 @@ public class LocalDateFormatter {
                     .map(LocalDateFormatter::format)
                     .isPresent();
         } catch (DateTimeParseException exception) {
+            System.out.println("Invalid date " + date);
             return false;
         }
     }

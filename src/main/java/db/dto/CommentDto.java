@@ -2,7 +2,7 @@ package db.dto;
 
 import db.entity.NewsEntity;
 import db.entity.PortalUserEntity;
-import db.entity.StatusEntity;
+import db.entity.StatusesEntity;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -24,7 +24,7 @@ public class CommentDto {
     private Long newsId;
     private NewsEntity news;
     private PortalUserEntity user;
-    private StatusEntity status;
+    private StatusesEntity status;
 
     private final String DATE_PATTERN = "dd.MM.yyyy HH:mm";
 

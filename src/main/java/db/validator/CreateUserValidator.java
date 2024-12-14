@@ -10,7 +10,6 @@ public class CreateUserValidator implements Validator<CreatePortalUserDto> {
     private final PortalUserDaoImpl statusDao = PortalUserDaoImpl.getInstance();
 
     private CreateUserValidator() {
-
     }
 
     public static synchronized CreateUserValidator getInstance() {
@@ -23,11 +22,20 @@ public class CreateUserValidator implements Validator<CreatePortalUserDto> {
     @Override
     public ValidationResult isValid(CreatePortalUserDto object) {
         var validationResult = new ValidationResult();
-//        if (object.getRole() == null || Roles.find(object.getRole()).isEmpty()) {
-//            validationResult.add(Error.of("invalid.role", "Role is invalid"));
-//        }
         if (object.getFirstName().trim().isEmpty()) {
-            validationResult.add(Error.of("invalid.name", "Name is invalid"));
+            validationResult.add(Error.of("invalid.firstname", "First name is invalid"));
+        }
+        if (object.getLastName().trim().isEmpty()) {
+            validationResult.add(Error.of("invalid.lastname", "Last name is invalid"));
+        }
+        if (object.getNickname().trim().isEmpty()) {
+            validationResult.add(Error.of("invalid.nickname", "Nickname is invalid"));
+        }
+        if (object.getEmail().trim().isEmpty()) {
+            validationResult.add(Error.of("invalid.email", "Email is invalid"));
+        }
+        if (object.getPassword().trim().isEmpty()) {
+            validationResult.add(Error.of("invalid.password", "Password is invalid"));
         }
         return validationResult;
     }

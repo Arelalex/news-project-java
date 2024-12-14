@@ -135,7 +135,7 @@ public class RoleDaoImpl implements RoleDao<Integer, RoleEntity> {
         }
     }
 
-   @Override
+    @Override
     public Optional<RoleEntity> findByRole(Roles role, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ROLE_SQL)) {
             preparedStatement.setString(1, role.name());

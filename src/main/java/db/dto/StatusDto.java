@@ -13,4 +13,5 @@ public class StatusDto {
     private Integer limit;
     private Integer offset;
     private String status;
+    private Integer statusId;
 }

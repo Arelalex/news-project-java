@@ -1,10 +1,12 @@
 package db.servlet;
 
 import db.dto.CreatePortalUserDto;
+import db.enums.JspPage;
 import db.enums.Roles;
 import db.exception.ValidationException;
 import db.service.impl.CreatePortalUserServiceImpl;
 import db.util.JspHelper;
+import db.util.UrlPath;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.MultipartConfig;
 import jakarta.servlet.annotation.WebServlet;
@@ -15,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024)
-@WebServlet("/registration")
+@WebServlet(UrlPath.REGISTRATION)
 public class RegistrationServlet extends HttpServlet {
 
     private final CreatePortalUserServiceImpl createPortalUserService = CreatePortalUserServiceImpl.getInstance();
@@ -23,13 +25,12 @@ public class RegistrationServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setAttribute("roles", Roles.values());
-        req.getRequestDispatcher(JspHelper.getPath("registration"))
+        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.REGISTRATION_JSP))
                 .forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var image = req.getPart("image");
 
         var portalUserDto = CreatePortalUserDto.builder()
                 .firstName(req.getParameter("firstName"))
@@ -45,7 +46,9 @@ public class RegistrationServlet extends HttpServlet {
 
         try {
             createPortalUserService.create(portalUserDto);
-            resp.sendRedirect(JspHelper.getPath("login"));
+
+            System.out.println("Redirecting to login page...");
+            resp.sendRedirect(UrlPath.LOGIN);
         } catch (ValidationException exception) {
             req.setAttribute("errors", exception.getErrors());
             doGet(req, resp);

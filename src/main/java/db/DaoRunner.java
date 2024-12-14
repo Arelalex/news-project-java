@@ -2,7 +2,11 @@ package db;
 
 import db.dao.*;
 import db.dao.impl.*;
+import db.dto.NewsDto;
+import db.dto.RoleDto;
 import db.entity.*;
+import db.enums.Statuses;
+import db.service.impl.NewsServiceImpl;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,16 +18,17 @@ public class DaoRunner {
         PortalUserDao<Integer, PortalUserEntity> portalUserDao = PortalUserDaoImpl.getInstance();
         RoleDao<Integer, RoleEntity> roleDao = RoleDaoImpl.getInstance();
         CategoryDao<Integer, CategoryEntity> categoryDao = CategoryDaoImpl.getInstance();
-        StatusDao<Integer, StatusEntity> statusDao = StatusDaoImpl.getInstance();
+        StatusDao<Integer, StatusesEntity> statusDao = StatusDaoImpl.getInstance();
         NewsDao<Long, NewsEntity> newsDao = NewsDaoImpl.getInstance();
         CommentDao<Long, CommentEntity> commentDao = CommentDaoImpl.getInstance();
+        NewsServiceImpl newsService = NewsServiceImpl.getInstance();
 
         PortalUserEntity user = new PortalUserEntity();
         user.setUserId(8);
         CategoryEntity category = new CategoryEntity();
-        category.setCategoryId(3);
-        StatusEntity status = new StatusEntity();
-        status.setStatusId(2);
+        category.setCategoryId(4);
+        StatusesEntity status = new StatusesEntity();
+        status.setStatusId(1);
         NewsEntity news = new NewsEntity();
         news.setNewsId(4L);
 
@@ -32,7 +37,13 @@ public class DaoRunner {
         LocalDateTime updatedAt = LocalDateTime.now();
         System.out.println(createdAt);
 
-        commentDao.save(new CommentEntity("Круто", createdAt, updatedAt, null , news, user, status));
+        boolean isUpdated = newsService.updateStatus(3, 2, "Rejected");
+        System.out.println("обновление успешно " + isUpdated);
+
+        // поиск с использованием фильтра по названию Роли
+ //       System.out.println(newsDao.findAllByFilter(new NewsDto(Statuses.APPROVED.getId())));
+
+//        commentDao.save(new CommentEntity("Круто", createdAt, updatedAt, null , news, user, status));
 
 //        // обновление записи в таблице Роли
 //        var maybeNews = newsDao.findById(6L);
@@ -96,19 +107,15 @@ public class DaoRunner {
 
         // добавление записей в таблицу
 //        newsDao.save(new NewsEntity(
-//                "Новый рекорд в марафоне: бегун преодолел дистанцию за рекордные 2 часа 30 минут",
-//                "Мировой рекорд был установлен на международном марафоне в Берлине, где спортсмен из Кении продемонстрировал невероятные результаты",
-//                "В минувшие выходные в Берлине прошел международный марафон, в котором спортсмен из Кении установил новый мировой рекорд, преодолев дистанцию в 42,195 км за 2 часа 30 минут. Бегун, чье имя пока не раскрыто, показал невероятную выносливость и скорость, несмотря на высокие температуры и сильный ветер. После финиша он был встречен овациями, а эксперты по спорту уже называют его будущим лидером мирового марафона.\n" +
-//                "\n" +
-//                "Эксперты утверждают, что такой результат стал возможен благодаря внедрению новых тренировочных методов и технологии питания, используемой спортсменом. Кенийские марафонцы всегда славились своей выносливостью, но этот рекорд стал настоящей сенсацией. Многие бегуны и тренеры по всему миру уже начали изучать методы тренировки нового рекордсмена в надежде повторить его успех.\n" +
-//                "\n" +
-//                "Теперь внимание всех спортивных организаций и любителей марафона приковано к следующему крупному соревнованию, где спортсмены смогут попытаться побить этот рекорд. Обещает быть жаркое лето для всех любителей легкой атлетики!",
+//                "123",
+//                "123",
+//                "123",
 //                createdAt,
 //                updatedAt,
 //                null,
 //                user,
 //                category,
-//                status
+//                Statuses.ON_MODERATION
 //        ));
 
 //        // поиск с использованием фильтра по названию

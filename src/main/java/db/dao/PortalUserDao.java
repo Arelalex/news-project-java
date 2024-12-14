@@ -12,4 +12,6 @@ public interface PortalUserDao<K, E> extends Dao<K, E> {
     Optional<PortalUserEntity> findById(K id, Connection connection);
 
     List<PortalUserEntity> findAllByFilter(PortalUserDto filter);
+
+    Optional<PortalUserEntity> findByEmailAndPassword(String email, String password);
 }

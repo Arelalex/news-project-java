@@ -1,8 +1,10 @@
 package db.servlet;
 
+import db.enums.JspPage;
 import db.service.impl.CommentServiceImpl;
 import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
+import db.util.UrlPath;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -11,7 +13,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet("/comments")
+@WebServlet(UrlPath.COMMENTS)
 public class CommentServlet extends HttpServlet {
 
     private final CommentServiceImpl commentService = CommentServiceImpl.getInstance();
@@ -33,7 +35,7 @@ public class CommentServlet extends HttpServlet {
         } else {
             req.setAttribute("comments", commentService.findAll());
         }
-        req.getRequestDispatcher(JspHelper.getPath("comments"))
+        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.COMMENTS_JSP))
                 .forward(req, resp);
     }
 }

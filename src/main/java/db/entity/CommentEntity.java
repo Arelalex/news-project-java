@@ -20,9 +20,9 @@ public class CommentEntity {
     private String attachment;
     private NewsEntity news;
     private PortalUserEntity user;
-    private StatusEntity status;
+    private StatusesEntity status;
 
-    public CommentEntity(String content, LocalDateTime createAt, LocalDateTime updatedAt, String attachment, NewsEntity news, PortalUserEntity user, StatusEntity status) {
+    public CommentEntity(String content, LocalDateTime createAt, LocalDateTime updatedAt, String attachment, NewsEntity news, PortalUserEntity user, StatusesEntity status) {
         this.content = content;
         this.createdAt = createAt;
         this.updatedAt = updatedAt;
