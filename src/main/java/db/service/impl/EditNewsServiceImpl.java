@@ -10,6 +10,7 @@ import db.service.ImageService;
 import db.validator.EditNewsValidator;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 
 public class EditNewsServiceImpl implements EditNewsService {
@@ -30,7 +31,6 @@ public class EditNewsServiceImpl implements EditNewsService {
         return instance;
     }
 
-    @SneakyThrows
     public Long update(EditNewsDto newsDto) {
         var validationResult = editNewsValidator.isValid(newsDto);
         if (!validationResult.isValid()) {
@@ -40,7 +40,11 @@ public class EditNewsServiceImpl implements EditNewsService {
         newsEntity.setUpdatedAt(LocalDateTime.now());
         newsEntity.setStatus(Statuses.ON_MODERATION);
 
-        imageService.upload(newsEntity.getImage(), newsDto.getImage().getInputStream());
+        try {
+            imageService.upload(newsEntity.getImage(), newsDto.getImage().getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
         newsDao.update(newsEntity);
 

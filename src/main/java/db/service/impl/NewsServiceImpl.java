@@ -8,6 +8,7 @@ import db.mapper.impl.NewsMapperImpl;
 import db.service.NewsService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class NewsServiceImpl implements NewsService {
 
@@ -42,7 +43,7 @@ public class NewsServiceImpl implements NewsService {
                         .userId(news.getUser().getUserId())
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("News not found"));
     }
 
     @Override

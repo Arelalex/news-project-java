@@ -3,7 +3,7 @@
 <body>
 <hr>
 <footer>
-    <p>Контактная информация: test@test.com</p>
-    <p>Авторские права &copy; 2024</p>
+    <p><fmt:message key="page.footer.contactEmail" />: test@test.com</p>
+    <p><fmt:message key="page.footer.author" /> &copy; 2024</p>
 </footer>
 </body>

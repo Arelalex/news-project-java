@@ -14,15 +14,15 @@
          style="max-width: 10%; height: auto;">
     <p>${news.description}</p>
     <blockquote>${news.content}</blockquote>
-    <p><strong>Дата создания:</strong> ${news.formattedCreatedAt}</p>
-    <p><strong>Дата обновления:</strong> ${news.formattedUpdatedAt}</p>
-    <p><strong>Автор:</strong> <a href="${pageContext.request.contextPath}/user/news?userId=${news.userId}">${news.user.nickname}</a></p>
-    <p><strong>Категория:</strong> <a href="${pageContext.request.contextPath}/categories/news?categoryId=${news.category.categoryId}">${news.category.category}</a></p>
-    <p><strong>Статус:</strong> ${news.status}</p>
+    <p><strong><fmt:message key="page.newsDetails.createdAt" />:</strong> ${news.formattedCreatedAt}</p>
+    <p><strong><fmt:message key="page.newsDetails.updatedAt" />:</strong> ${news.formattedUpdatedAt}</p>
+    <p><strong><fmt:message key="page.newsDetails.author" />:</strong> <a href="${pageContext.request.contextPath}/user/news?userId=${news.userId}">${news.user.nickname}</a></p>
+    <p><strong><fmt:message key="page.newsDetails.category" />:</strong> <a href="${pageContext.request.contextPath}/categories/news?categoryId=${news.category.categoryId}">${news.category.category}</a></p>
+    <p><strong><fmt:message key="page.newsDetails.status" />:</strong> ${news.status}</p>
     <br>
     </div>
 <div>
-    <h3>Комментарии:</h3>
+    <h3><fmt:message key="page.newsDetails.comments" />:</h3>
     <p>
     <c:forEach var="comments" items="${requestScope.comments}">
         <span>${comments.user.nickname}</span><span> ${comments.createdAt}</span>

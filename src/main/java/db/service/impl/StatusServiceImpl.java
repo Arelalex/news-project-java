@@ -8,6 +8,7 @@ import db.mapper.impl.StatusMapperImpl;
 import db.service.StatusService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class StatusServiceImpl implements StatusService {
@@ -34,7 +35,7 @@ public class StatusServiceImpl implements StatusService {
                         .status(String.valueOf(status.getStatus()))
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("Status not found"));
     }
 
     @Override

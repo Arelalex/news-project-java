@@ -6,6 +6,7 @@ import db.mapper.impl.RoleMapperImpl;
 import db.service.RoleService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class RoleServiceImpl implements RoleService {
 
@@ -30,7 +31,7 @@ public class RoleServiceImpl implements RoleService {
                         .role(String.valueOf(role.getRole()))
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("Role not found"));
     }
 
     @Override

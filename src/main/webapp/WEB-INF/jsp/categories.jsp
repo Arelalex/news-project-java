@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@ include file="header.jsp"%>
-<h2>Список категорий:</h2>
+<h2><fmt:message key="page.categories.categories" />:</h2>
 <ul>
     <c:forEach var="category" items="${requestScope.categories}">
         <li>

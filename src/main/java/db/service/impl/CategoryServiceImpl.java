@@ -8,6 +8,7 @@ import db.mapper.impl.CategoryMapperImpl;
 import db.service.CategoryService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 public class CategoryServiceImpl implements CategoryService {
@@ -34,7 +35,7 @@ public class CategoryServiceImpl implements CategoryService {
                         .category(category.getCategory())
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
     }
 
     @Override

@@ -222,7 +222,6 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
         }
     }
 
-    @SneakyThrows
     @Override
     public Optional<PortalUserEntity> findByEmailAndPassword(String email, String password) {
         try (var connection = ConnectionManager.get();
@@ -236,6 +235,8 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
                 portalUser = buildUser(resultSet);
             }
             return Optional.ofNullable(portalUser);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

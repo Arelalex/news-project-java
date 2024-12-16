@@ -3,6 +3,7 @@ package db.service;
 import db.util.PropertiesUtil;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -24,21 +25,24 @@ public class ImageService {
         return instance;
     }
 
-    @SneakyThrows
     public void upload(String imagePath, InputStream imageContent) {
         var imageFullPath = Path.of(basePath, imagePath);
         try(imageContent){
             Files.createDirectories(imageFullPath.getParent());
             Files.write(imageFullPath, imageContent.readAllBytes(), StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 
-    @SneakyThrows
     public Optional<InputStream> get(String imagePath) {
         var imageFullPath = Path.of(basePath, imagePath);
-
-        return Files.exists(imageFullPath)
-                ? Optional.of(Files.newInputStream(imageFullPath))
-                : Optional.empty();
+        try {
+            return Files.exists(imageFullPath)
+                    ? Optional.of(Files.newInputStream(imageFullPath))
+                    : Optional.empty();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

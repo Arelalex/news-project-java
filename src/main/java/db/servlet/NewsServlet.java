@@ -21,7 +21,11 @@ public class NewsServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("news", newsService.findAllByFilter(new NewsDto(null, null, Statuses.APPROVED.getId())));
+        NewsDto filter = NewsDto.builder()
+                .statusId(Statuses.APPROVED.getId())
+                .build();
+
+        req.setAttribute("news", newsService.findAllByFilter(filter));
         req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP))
                 .forward(req, resp);
     }

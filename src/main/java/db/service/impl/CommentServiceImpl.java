@@ -7,6 +7,7 @@ import db.mapper.impl.CommentMapperImpl;
 import db.service.CommentService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class CommentServiceImpl implements CommentService {
 
@@ -33,7 +34,7 @@ public class CommentServiceImpl implements CommentService {
                         .updatedAt(comment.getUpdatedAt())
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("Comment not found"));
     }
 
     @Override

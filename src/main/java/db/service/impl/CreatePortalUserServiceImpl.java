@@ -11,6 +11,7 @@ import db.service.ImageService;
 import db.validator.CreateUserValidator;
 import lombok.SneakyThrows;
 
+import java.io.IOException;
 import java.util.Optional;
 
 public class CreatePortalUserServiceImpl implements CreatePortalUserService {
@@ -37,14 +38,17 @@ public class CreatePortalUserServiceImpl implements CreatePortalUserService {
                 .map(userMapper::toDto);
     }
 
-    @SneakyThrows
     public Integer create(CreatePortalUserDto userDto) {
         var validationResult = createUserValidator.isValid(userDto);
         if (!validationResult.isValid()) {
             throw new ValidationException(validationResult.getErrors());
         }
         var portalUserEntity = portalUserMapper.toEntity(userDto);
-        imageService.upload(portalUserEntity.getImage(), userDto.getImage().getInputStream());
+        try {
+            imageService.upload(portalUserEntity.getImage(), userDto.getImage().getInputStream());
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
         portalUserDao.save(portalUserEntity);
 
         return portalUserEntity.getUserId();

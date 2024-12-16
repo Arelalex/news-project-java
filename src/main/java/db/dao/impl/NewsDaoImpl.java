@@ -69,6 +69,10 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
             WHERE n.news_id = ?
             """;
 
+    private static final String SORT_SQL = """
+            ORDER BY n.created_at DESC LIMIT ? OFFSET ?
+            """;
+
     private static final String FIND_BY_CATEGORY_ID = """
                 SELECT 
                     n.news_id,
@@ -267,9 +271,9 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         parameters.add(filter.getLimit());
         parameters.add(filter.getOffset());
         var where = whereSql.stream()
-                .collect(joining(" AND ", " WHERE ", " LIMIT ? OFFSET ? "));
+                .collect(joining(" AND ", " WHERE ", " "));
 
-        var sql = FIND_ALL_SQL + where;
+        var sql = FIND_ALL_SQL + where + SORT_SQL;
 
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(sql)) {

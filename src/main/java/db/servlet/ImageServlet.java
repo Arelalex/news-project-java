@@ -29,13 +29,14 @@ public class ImageServlet extends HttpServlet {
                 }, () -> resp.setStatus(404));
     }
 
-    @SneakyThrows
     private void writeImage(InputStream image, HttpServletResponse resp) {
         try (image; var outputStream = resp.getOutputStream()) {
             int currentByte;
             while ((currentByte = image.read()) != -1) {
                 outputStream.write(currentByte);
             }
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 }

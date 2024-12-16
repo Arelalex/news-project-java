@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<h2>Комментарии:</h2>
+<h2><fmt:message key="page.comments.comments" />:</h2>
 <ul>
     <c:forEach var="comments" items="${requestScope.comments}">
         <li>${comments.content} - ${comments.formattedCreatedAt} -

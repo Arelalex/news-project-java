@@ -1,6 +1,10 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
+<fmt:setLocale value="${sessionScope.lang != null
+                            ? sessionScope.lang
+                            : (param.lang != null ? param.lang : 'en_US')}"/>
+<fmt:setBundle basename="translations" />
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -46,7 +50,7 @@
     </style>
 </head>
 <body>
-<h1>Новостной портал</h1>
+<h1><fmt:message key="page.news.header" /></h1>
 <c:if test="${not empty sessionScope.user}">
     <div class="user-email">
         <p>${sessionScope.user.email}</p>
@@ -58,14 +62,14 @@
         <c:if test="${empty sessionScope.user}">
             <div id="loginId">
                 <a href="${pageContext.request.contextPath}/login">
-                    <button type="button">Login</button>
+                    <button type="button"><fmt:message key="page.news.button.login" /></button>
                 </a>
             </div>
         </c:if>
         <c:if test="${not empty sessionScope.user}">
             <div id="logout">
                 <form action="/logout" method="post">
-                    <button type="submit">Logout</button>
+                    <button type="submit"><fmt:message key="page.news.button.logout" /></button>
                 </form>
             </div>
         </c:if>
@@ -76,24 +80,24 @@
         <c:if test="${not empty sessionScope.user && sessionScope.user.role == 'MODERATOR'}">
             <div id="moderatorId">
                 <a href="${pageContext.request.contextPath}/moderator">
-                    <button type="button">For Moderator</button>
+                    <button type="button"><fmt:message key="page.news.button.moderator" /></button>
                 </a>
             </div>
             <div id="userNews">
                 <a href="${pageContext.request.contextPath}/news">
-                    <button type="button">For Users</button>
+                    <button type="button"><fmt:message key="page.news.button.users" /></button>
                 </a>
             </div>
         </c:if>
         <c:if test="${not empty sessionScope.user && sessionScope.user.role == 'USER'}">
             <div id="create">
                 <a href="${pageContext.request.contextPath}/create-news">
-                    <button type="button">Create News</button>
+                    <button type="button"><fmt:message key="page.news.button.createNews" /></button>
                 </a>
             </div>
             <div id="myNews">
                 <a href="${pageContext.request.contextPath}/author-news">
-                    <button type="button">My News</button>
+                    <button type="button"><fmt:message key="page.news.button.myNews" /></button>
                 </a>
             </div>
         </c:if>
@@ -105,10 +109,6 @@
         </div>
     </div>
 </div>
-<fmt:setLocale value="${sessionScope.lang !=null
-? sessionScope.lang
-: (param.lang !=null ? param.lang : 'en_US')}"/>
-<fmt:setBundle basename="translations"/>
 <hr>
 </body>
 </html>

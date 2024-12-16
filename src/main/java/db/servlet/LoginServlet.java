@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 
@@ -30,30 +29,32 @@ public class LoginServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         createPortalUserService.login(req.getParameter("email"), req.getParameter("password"))
                 .ifPresentOrElse(
-                        user -> {
-                            try {
-                                onLoginSuccess(user, req, resp);
-                            } catch (ServletException e) {
-                                throw new RuntimeException(e);
-                            } catch (IOException e) {
-                                throw new RuntimeException(e);
-                            }
-                        },
+                        user -> doExceptionLoginSuccess(user, req, resp),
                         () -> onLoginFail(req, resp)
                 );
     }
 
-    @SneakyThrows
     private void onLoginFail(HttpServletRequest req, HttpServletResponse resp) {
-        resp.sendRedirect("/login?error&email=" + req.getParameter("email"));
+        try {
+            resp.sendRedirect("/login?error&email=" + req.getParameter("email"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 
-    @SneakyThrows
     private void onLoginSuccess(PortalUserDto user, HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession();
         session.setAttribute("userId", user.getUserId());
         session.setAttribute("user", user);
 
         resp.sendRedirect("/news");
+    }
+
+    private void doExceptionLoginSuccess(PortalUserDto user, HttpServletRequest req, HttpServletResponse resp) {
+        try {
+            onLoginSuccess(user, req, resp);
+        } catch (ServletException | IOException e) {
+            throw new RuntimeException(e);
+        }
     }
 }

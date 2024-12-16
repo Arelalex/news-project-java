@@ -8,7 +8,7 @@
 </head>
 <body>
 <%@ include file="header.jsp"%>
-<h2>Роли пользователей в системе:</h2>
+<h2><fmt:message key="page.roles.title" />:</h2>
 <ul>
     <c:forEach var="roles" items="${requestScope.roles}">
         <li>${roles.role}</li>
