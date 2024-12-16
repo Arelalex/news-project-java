@@ -5,6 +5,7 @@ import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
 import db.exception.*;
 import db.util.ConnectionManager;
+import lombok.SneakyThrows;
 
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -66,6 +67,19 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
 
     private static final String FIND_BY_ID_SQL = FIND_ALL_SQL + """
             WHERE u.user_id = ?
+            """;
+
+    private static final String GET_BY_EMAIL_AND_PASSWORD_SQL = """
+            SELECT user_id,
+                first_name,
+                last_name,
+                nickname,
+                email,
+                password,
+                image,
+                role_id
+                FROM portal_user
+                WHERE email = ? AND password = ?
             """;
 
     private static PortalUserDaoImpl instance;
@@ -205,6 +219,24 @@ public class PortalUserDaoImpl implements PortalUserDao<Integer, PortalUserEntit
             return portalUsers;
         } catch (SQLException throwables) {
             throw new DaoExceptionFindAll("Error searching for values in table", throwables);
+        }
+    }
+
+    @Override
+    public Optional<PortalUserEntity> findByEmailAndPassword(String email, String password) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(GET_BY_EMAIL_AND_PASSWORD_SQL)) {
+            preparedStatement.setString(1, email);
+            preparedStatement.setString(2, password);
+
+            var resultSet = preparedStatement.executeQuery();
+            PortalUserEntity portalUser = null;
+            if (resultSet.next()) {
+                portalUser = buildUser(resultSet);
+            }
+            return Optional.ofNullable(portalUser);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 

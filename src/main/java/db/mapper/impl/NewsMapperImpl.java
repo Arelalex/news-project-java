@@ -1,10 +1,7 @@
 package db.mapper.impl;
 
 import db.dto.NewsDto;
-import db.entity.CategoryEntity;
 import db.entity.NewsEntity;
-import db.entity.PortalUserEntity;
-import db.entity.StatusEntity;
 import db.mapper.NewsMapper;
 
 public class NewsMapperImpl implements NewsMapper {
@@ -35,6 +32,7 @@ public class NewsMapperImpl implements NewsMapper {
                 .user(dto.getUser())
                 .category(dto.getCategory())
                 .status(dto.getStatus())
+                .reasonRej(dto.getReasonRej())
                 .build();
     }
 
@@ -53,6 +51,9 @@ public class NewsMapperImpl implements NewsMapper {
                 .category(entity.getCategory())
                 .status(entity.getStatus())
                 .userId(entity.getUser().getUserId())
+                .statusId(entity.getStatus().getId())
+                .categoryId(entity.getCategory().getCategoryId())
+                .reasonRej(entity.getReasonRej())
                 .build();
     }
 }

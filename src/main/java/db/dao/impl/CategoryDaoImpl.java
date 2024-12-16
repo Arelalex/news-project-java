@@ -41,6 +41,13 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
     private static final String FIND_BY_ID_SQL = FIND_ALL_SQL + """
             WHERE category.category_id = ?
             """;
+
+    private static final String FIND_BY_NAME_SQL = """
+            SELECT category_id,
+                category
+            FROM category WHERE category = ?
+            """;
+
     private static CategoryDaoImpl instance;
 
     private CategoryDaoImpl() {
@@ -170,10 +177,30 @@ public class CategoryDaoImpl implements CategoryDao<Integer, CategoryEntity> {
         }
     }
 
+    public Optional<CategoryEntity> findByName(String category) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(FIND_BY_NAME_SQL)) {
+            preparedStatement.setString(1, category);
+
+            try (var resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(new CategoryEntity(
+                            resultSet.getInt("category_id"),
+                            resultSet.getString("category")
+                    ));
+                }
+            }
+        } catch (SQLException throwables) {
+            throw new DaoExceptionFindAll("Error searching category by category ID", throwables);
+        }
+        return Optional.empty();
+    }
+
     private CategoryEntity buildCategory(ResultSet resultSet) throws SQLException {
         return new CategoryEntity(
                 resultSet.getInt(CATEGORY_ID),
                 resultSet.getString(CATEGORY_CATEGORY)
         );
     }
+
 }

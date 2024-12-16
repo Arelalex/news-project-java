@@ -7,6 +7,7 @@ import db.mapper.impl.PortalUserMapperImpl;
 import db.service.PortalUserService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class PortalUserServiceImpl implements PortalUserService {
 
@@ -36,7 +37,7 @@ public class PortalUserServiceImpl implements PortalUserService {
                         .role(user.getRole())
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     @Override

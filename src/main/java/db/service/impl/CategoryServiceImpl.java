@@ -2,11 +2,14 @@ package db.service.impl;
 
 import db.dao.impl.CategoryDaoImpl;
 import db.dto.CategoryDto;
+import db.entity.CategoryEntity;
 import db.mapper.CategoryMapper;
 import db.mapper.impl.CategoryMapperImpl;
 import db.service.CategoryService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class CategoryServiceImpl implements CategoryService {
 
@@ -26,7 +29,13 @@ public class CategoryServiceImpl implements CategoryService {
 
     @Override
     public CategoryDto findById(Integer id) {
-        return null;
+        return categoryDao.findById(id)
+                .map(category -> CategoryDto.builder()
+                        .categoryId(category.getCategoryId())
+                        .category(category.getCategory())
+                        .build()
+                )
+                .orElseThrow(() -> new NoSuchElementException("Category not found"));
     }
 
     @Override
@@ -62,5 +71,9 @@ public class CategoryServiceImpl implements CategoryService {
                 .stream()
                 .map(categoryMapper::toDto)
                 .toList();
+    }
+
+    public Optional<CategoryEntity> findByName(String category) {
+        return categoryDao.findByName(category);
     }
 }

@@ -2,7 +2,7 @@ package db.dto;
 
 import db.entity.CategoryEntity;
 import db.entity.PortalUserEntity;
-import db.entity.StatusEntity;
+import db.enums.Statuses;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -26,18 +26,27 @@ public class NewsDto {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     private String image;
-  private PortalUserEntity user;
+    private PortalUserEntity user;
     private CategoryEntity category;
-    private StatusEntity status;
+    private Statuses status;
     private Integer userId;
+    private Integer categoryId;
+    private Integer statusId;
+    private String reasonRej;
 
     public NewsDto(String title, String description) {
         this.title = title;
         this.description = description;
     }
 
-    public NewsDto(Integer userId) {
+    public NewsDto(Integer userId, Integer categoryId, Integer statusId) {
         this.userId = userId;
+        this.categoryId = categoryId;
+        this.statusId = statusId;
+    }
+
+    public NewsDto(Statuses status) {
+        this.status = status;
     }
 
     public String getFormattedCreatedAt() {

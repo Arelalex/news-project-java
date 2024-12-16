@@ -2,12 +2,9 @@ package db.dao.impl;
 
 import db.dao.StatusDao;
 import db.dto.StatusDto;
-import db.entity.StatusEntity;
+import db.entity.StatusesEntity;
 import db.enums.Statuses;
-import db.exception.DaoExceptionDelete;
-import db.exception.DaoExceptionFindById;
-import db.exception.DaoExceptionInsert;
-import db.exception.DaoExceptionUpdate;
+import db.exception.*;
 import db.util.ConnectionManager;
 
 import java.sql.Connection;
@@ -20,7 +17,7 @@ import java.util.Optional;
 
 import static java.util.stream.Collectors.joining;
 
-public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
+public class StatusDaoImpl implements StatusDao<Integer, StatusesEntity> {
 
     private static final String STATUS_ID = "status_id";
     private static final String STATUS_STATUS = "status";
@@ -51,6 +48,12 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
             WHERE status.status_id = ?
             """;
 
+    private static final String FIND_BY_NAME_SQL = """
+            SELECT status_id,
+                status
+            FROM status WHERE status = ?
+            """;
+
     private static StatusDaoImpl instance;
 
     private StatusDaoImpl() {
@@ -71,35 +74,35 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
 
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException throwables) {
-            throw new DaoExceptionDelete("Error deleting values from table",throwables);
+            throw new DaoExceptionDelete("Error deleting values from table", throwables);
         }
     }
 
     @Override
-    public StatusEntity save(StatusEntity statusEntity) {
+    public StatusesEntity save(StatusesEntity statuses) {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(SAVE_SQL, Statement.RETURN_GENERATED_KEYS)) {
-            preparedStatement.setString(1, statusEntity.getStatus().name());
+            preparedStatement.setString(1, statuses.getStatus().name());
 
             preparedStatement.executeUpdate();
 
             var generatedKeys = preparedStatement.getGeneratedKeys();
             if (generatedKeys.next()) {
-                statusEntity.setStatusId(generatedKeys.getInt("id"));
+                statuses.setStatusId(generatedKeys.getInt("id"));
             }
-            return statusEntity;
+            return statuses;
         } catch (SQLException throwables) {
             throw new DaoExceptionInsert("Error inserting values into table", throwables);
         }
     }
 
     @Override
-    public void update(StatusEntity statusEntity) {
+    public void update(StatusesEntity statuses) {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
-            preparedStatement.setString(1, statusEntity.getStatus().name());
+            preparedStatement.setString(1, statuses.getStatus().name());
 
-            preparedStatement.setLong(2, statusEntity.getStatusId());
+            preparedStatement.setLong(2, statuses.getStatusId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -108,7 +111,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
     }
 
     @Override
-    public Optional<StatusEntity> findById(Integer id) {
+    public Optional<StatusesEntity> findById(Integer id) {
         try (var connection = ConnectionManager.get()) {
             return findById(id, connection);
         } catch (SQLException throwables) {
@@ -117,23 +120,42 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
     }
 
     @Override
-    public Optional<StatusEntity> findById(Integer id, Connection connection) {
+    public Optional<StatusesEntity> findById(Integer id, Connection connection) {
         try (var preparedStatement = connection.prepareStatement(FIND_BY_ID_SQL)) {
             preparedStatement.setInt(1, id);
 
             var resultSet = preparedStatement.executeQuery();
-            StatusEntity statusEntity = null;
+            StatusesEntity statuses = null;
             if (resultSet.next()) {
-                statusEntity = buildStatus(resultSet);
+                statuses = buildStatus(resultSet);
             }
-            return Optional.ofNullable(statusEntity);
+            return Optional.ofNullable(statuses);
         } catch (SQLException throwables) {
             throw new DaoExceptionFindById("Error searching values by ID in table", throwables);
         }
     }
 
+    public Optional<StatusesEntity> findByName(String status) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(FIND_BY_NAME_SQL)) {
+            preparedStatement.setString(1, status);
+
+            try (var resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return Optional.of(new StatusesEntity(
+                            resultSet.getInt("status_id"),
+                            Statuses.valueOf(resultSet.getString(STATUS_STATUS))
+                    ));
+                }
+            }
+        } catch (SQLException throwables) {
+            throw new DaoExceptionFindAll("Error searching status by status ID", throwables);
+        }
+        return Optional.empty();
+    }
+
     @Override
-    public List<StatusEntity> findAllByFilter(StatusDto filter) {
+    public List<StatusesEntity> findAllByFilter(StatusDto filter) {
         List<Object> parameters = new ArrayList<>();
         List<String> whereSql = new ArrayList<>();
         if (filter.getStatus() != null) {
@@ -154,7 +176,7 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
             }
             System.out.println(preparedStatement);
             var resultSet = preparedStatement.executeQuery();
-            List<StatusEntity> statusEntities = new ArrayList<>();
+            List<StatusesEntity> statusEntities = new ArrayList<>();
             while (resultSet.next()) {
                 statusEntities.add(buildStatus(resultSet));
             }
@@ -165,11 +187,11 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
     }
 
     @Override
-    public List<StatusEntity> findAll() {
+    public List<StatusesEntity> findAll() {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(FIND_ALL_SQL)) {
             var resultSet = preparedStatement.executeQuery();
-            List<StatusEntity> statusEntities = new ArrayList<>();
+            List<StatusesEntity> statusEntities = new ArrayList<>();
             while (resultSet.next()) {
                 statusEntities.add(buildStatus(resultSet));
             }
@@ -179,8 +201,8 @@ public class StatusDaoImpl implements StatusDao<Integer, StatusEntity> {
         }
     }
 
-    private StatusEntity buildStatus(ResultSet resultSet) throws SQLException {
-        return new StatusEntity(
+    private StatusesEntity buildStatus(ResultSet resultSet) throws SQLException {
+        return new StatusesEntity(
                 resultSet.getInt(STATUS_ID),
                 Statuses.valueOf(resultSet.getString(STATUS_STATUS))
         );

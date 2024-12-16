@@ -1,6 +1,7 @@
 package db.servlet;
 
 import db.dto.NewsDto;
+import db.enums.JspPage;
 import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
 import jakarta.servlet.ServletException;
@@ -26,7 +27,7 @@ public class TestContentServlet extends HttpServlet {
         req.getSession().setAttribute("newsMap", newsDtos.stream()
                 .collect(toMap(NewsDto::getTitle, NewsDto::getDescription)));
 
-        req.getRequestDispatcher(JspHelper.getPath("content"))
+        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.COMMENTS_JSP))
                 .forward(req, resp);
     }
 }

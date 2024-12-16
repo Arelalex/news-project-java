@@ -19,4 +19,8 @@ public interface NewsService {
     List<NewsDto> findAllByFilter(NewsDto filter);
 
     List<NewsDto> findByCategoryId(Integer categoryId);
+
+    List<NewsDto> findByStatusId(Integer statusId);
+
+    boolean updateStatus(Integer newsId, Integer statusId, String reason_rej);
 }

@@ -1,5 +1,6 @@
 package db.entity;
 
+import db.enums.Statuses;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,9 +23,10 @@ public class NewsEntity {
     private String image;
     private PortalUserEntity user;
     private CategoryEntity category;
-    private StatusEntity status;
+    private Statuses status;
+    private String reasonRej;
 
-    public NewsEntity(String title, String description, String content, LocalDateTime createdAt, LocalDateTime updatedAt, String image, PortalUserEntity user, CategoryEntity category, StatusEntity status) {
+    public NewsEntity(String title, String description, String content, LocalDateTime createdAt, LocalDateTime updatedAt, String image, PortalUserEntity user, CategoryEntity category, Statuses status) {
         this.title = title;
         this.description = description;
         this.content = content;

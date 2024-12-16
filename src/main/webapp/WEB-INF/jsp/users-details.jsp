@@ -1,19 +1,19 @@
 <%@ page contentType="text/html;charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
-
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <html>
 <head>
-    <title>Title</title>
+    <title>User Details</title>
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<h2>Информация о пользователе:</h2>
+<h2><fmt:message key="page.usersDetails.title" />:</h2>
 <div>
     <p>${user.firstName} ${user.lastName}</p>
-    <p>email: ${user.email}</p>
-    <p>Никнейм: ${user.nickname}</p>
-    <p>Роль: ${user.role}</p>
+    <p><fmt:message key="page.usersDetails.email" />: ${user.email}</p>
+    <p><fmt:message key="page.usersDetails.nick" />: ${user.nickname}</p>
+    <p><fmt:message key="page.usersDetails.role" />: ${user.role}</p>
 </div>
 <%@ include file="footer.jsp" %>
 </body>

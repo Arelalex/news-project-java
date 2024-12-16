@@ -2,12 +2,13 @@ package db.service.impl;
 
 import db.dao.impl.NewsDaoImpl;
 import db.dto.NewsDto;
+import db.exception.DaoExceptionUpdate;
 import db.mapper.NewsMapper;
 import db.mapper.impl.NewsMapperImpl;
 import db.service.NewsService;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.NoSuchElementException;
 
 public class NewsServiceImpl implements NewsService {
 
@@ -42,7 +43,7 @@ public class NewsServiceImpl implements NewsService {
                         .userId(news.getUser().getUserId())
                         .build()
                 )
-                .orElse(null);
+                .orElseThrow(() -> new NoSuchElementException("News not found"));
     }
 
     @Override
@@ -65,7 +66,17 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public void delete(NewsDto dto) {
+    }
 
+    @Override
+    public boolean updateStatus(Integer newsId, Integer statusId, String reasonRej) {
+        try {
+            System.out.println("Updating status for newsId: " + newsId + " with statusId: " + statusId);
+            return newsDao.updateStatus(newsId, statusId, reasonRej);
+        } catch (DaoExceptionUpdate e) {
+            System.err.println("Error while updating status for newsId: " + newsId + ", statusId: " + statusId);
+            throw new DaoExceptionUpdate("Error while updating status", e);
+        }
     }
 
     @Override
@@ -80,14 +91,15 @@ public class NewsServiceImpl implements NewsService {
     public List<NewsDto> findByCategoryId(Integer categoryId) {
         return newsDao.findByCategoryId(categoryId)
                 .stream()
-                .map(news -> NewsDto.builder()
-                        .newsId(news.getNewsId())
-                        .title(news.getTitle())
-                        .description(news.getDescription())
-                        .content(news.getContent())
-                        .createdAt(news.getCreatedAt())
-                        .updatedAt(news.getUpdatedAt())
-                        .build())
-                .collect(Collectors.toList());
+                .map(newsMapper::toDto)
+                .toList();
+    }
+
+    @Override
+    public List<NewsDto> findByStatusId(Integer statusId) {
+        return newsDao.findByStatusId(statusId)
+                .stream()
+                .map(newsMapper::toDto)
+                .toList();
     }
 }

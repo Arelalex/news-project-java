@@ -20,7 +20,6 @@ public class PortalUserEntity {
     private String password;
     private String image;
     private Roles role;
-    // private List<News> news;
 
     public PortalUserEntity(String firstName, String lastName, String nickname, String email, String password, String image, Roles role) {
         this.firstName = firstName;

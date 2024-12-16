@@ -10,11 +10,11 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class StatusEntity {
+public class StatusesEntity {
     private Integer statusId;
     private Statuses status;
 
-    public StatusEntity(Statuses status) {
+    public StatusesEntity(Statuses status) {
         this.status = status;
     }
 }

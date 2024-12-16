@@ -2,7 +2,6 @@ package db.mapper.impl;
 
 import db.dto.PortalUserDto;
 import db.entity.PortalUserEntity;
-import db.enums.Roles;
 import db.mapper.PortalUserMapper;
 
 public class PortalUserMapperImpl implements PortalUserMapper {
@@ -28,7 +27,6 @@ public class PortalUserMapperImpl implements PortalUserMapper {
                 .lastName(dto.getLastName())
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
-                .password(dto.getPassword())
                 .role(dto.getRole())
                 .build();
     }
@@ -42,7 +40,6 @@ public class PortalUserMapperImpl implements PortalUserMapper {
                 .lastName(portalUser.getLastName())
                 .nickname(portalUser.getNickname())
                 .email(portalUser.getEmail())
-                .password(portalUser.getPassword())
                 .role(portalUser.getRole())
                 .build();
     }

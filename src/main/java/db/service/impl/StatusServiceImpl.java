@@ -2,11 +2,14 @@ package db.service.impl;
 
 import db.dao.impl.StatusDaoImpl;
 import db.dto.StatusDto;
+import db.entity.StatusesEntity;
 import db.mapper.StatusMapper;
 import db.mapper.impl.StatusMapperImpl;
 import db.service.StatusService;
 
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 public class StatusServiceImpl implements StatusService {
 
@@ -26,7 +29,13 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public StatusDto findById(Integer id) {
-        return null;
+        return statusDao.findById(id)
+                .map(status -> StatusDto.builder()
+                        .statusId(status.getStatusId())
+                        .status(String.valueOf(status.getStatus()))
+                        .build()
+                )
+                .orElseThrow(() -> new NoSuchElementException("Status not found"));
     }
 
     @Override
@@ -51,7 +60,6 @@ public class StatusServiceImpl implements StatusService {
 
     @Override
     public void delete(StatusDto dto) {
-
     }
 
     @Override
@@ -60,5 +68,9 @@ public class StatusServiceImpl implements StatusService {
                 .stream()
                 .map(statusMapper::toDto)
                 .toList();
+    }
+
+    public Optional<StatusesEntity> findByName(String status) {
+        return statusDao.findByName(status);
     }
 }
