@@ -68,7 +68,7 @@
         </c:if>
         <c:if test="${not empty sessionScope.user}">
             <div id="logout">
-                <form action="/logout" method="post">
+                <form action="${pageContext.request.contextPath}/logout" method="post">
                     <button type="submit"><fmt:message key="page.news.button.logout" /></button>
                 </form>
             </div>
@@ -98,6 +98,11 @@
             <div id="myNews">
                 <a href="${pageContext.request.contextPath}/author-news">
                     <button type="button"><fmt:message key="page.news.button.myNews" /></button>
+                </a>
+            </div>
+            <div id="myComments">
+                <a href="${pageContext.request.contextPath}/author-comments">
+                    <button type="button"><fmt:message key="page.news.button.myComments" /></button>
                 </a>
             </div>
         </c:if>

@@ -43,7 +43,8 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
                         content = ?,
                         updated_at = ?,
                         image = ?,
-            status_id = ?
+                        category_id = ?,
+                        status_id = ?
                     WHERE news_id = ?
             """;
 
@@ -93,7 +94,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
                 WHERE n.category_id = ?
             """;
 
-    private static final String FIND_BY_STATUS_ID = """
+    private static final String FIND_BY_STATUS_ID_SQL = """
             SELECT
                     n.news_id,
                     n.title, 
@@ -178,9 +179,10 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
             preparedStatement.setString(3, newsEntity.getContent());
             preparedStatement.setTimestamp(4, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(5, newsEntity.getImage());
-            preparedStatement.setInt(6, newsEntity.getStatus().getId());
+            preparedStatement.setInt(6, newsEntity.getCategory().getCategoryId());
+            preparedStatement.setInt(7, newsEntity.getStatus().getId());
 
-            preparedStatement.setLong(7, newsEntity.getNewsId());
+            preparedStatement.setLong(8, newsEntity.getNewsId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
@@ -188,13 +190,13 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
         }
     }
 
-    public boolean updateStatus(Integer newsId, Integer statusId, String reason_rej) {
+    public boolean updateStatus(Long newsId, Integer statusId, String reason_rej) {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_STATUS_SQL)) {
             preparedStatement.setInt(1, statusId);
             preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
             preparedStatement.setString(3, reason_rej);
-            preparedStatement.setInt(4, newsId);
+            preparedStatement.setLong(4, newsId);
 
             return preparedStatement.executeUpdate() > 0;
         } catch (SQLException throwables) {
@@ -328,7 +330,7 @@ public class NewsDaoImpl implements NewsDao<Long, NewsEntity> {
     @Override
     public List<NewsEntity> findByStatusId(Integer statusId) {
         try (var connection = ConnectionManager.get();
-             var preparedStatement = connection.prepareStatement(FIND_BY_STATUS_ID)) {
+             var preparedStatement = connection.prepareStatement(FIND_BY_STATUS_ID_SQL)) {
             preparedStatement.setInt(1, statusId);
 
             try (var resultSet = preparedStatement.executeQuery()) {

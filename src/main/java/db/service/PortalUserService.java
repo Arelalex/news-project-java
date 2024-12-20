@@ -1,5 +1,6 @@
 package db.service;
 
+import db.dto.NewsDto;
 import db.dto.PortalUserDto;
 
 import java.util.List;
@@ -15,5 +16,7 @@ public interface PortalUserService {
     PortalUserDto update(PortalUserDto portalUserDto);
 
     void delete(PortalUserDto portalUserDto);
+
+    List<PortalUserDto> findAllByFilter(PortalUserDto filter);
 
 }

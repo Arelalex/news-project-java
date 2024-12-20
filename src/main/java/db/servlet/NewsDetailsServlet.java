@@ -2,6 +2,7 @@ package db.servlet;
 
 import db.dto.CommentDto;
 import db.enums.JspPage;
+import db.enums.Statuses;
 import db.service.impl.CommentServiceImpl;
 import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
@@ -26,9 +27,11 @@ public class NewsDetailsServlet extends HttpServlet {
         if (newsIdParam != null && !newsIdParam.isBlank()) {
             try {
                 var newsId = Long.valueOf(newsIdParam);
+                System.out.println("Статус = " + Statuses.APPROVED.getId());
+                System.out.println("Новость = " + newsId);
 
                 req.setAttribute("news", newsService.findById(newsId));
-                req.setAttribute("comments", commentService.findAllByFilter(new CommentDto(newsId)));
+                req.setAttribute("comments", commentService.findAllByFilter(new CommentDto(newsId, Statuses.APPROVED.getId())));
                 req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_DETAILS_JSP))
                         .forward(req, resp);
                 return;

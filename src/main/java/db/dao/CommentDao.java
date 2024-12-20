@@ -1,6 +1,7 @@
 package db.dao;
 
 import db.dto.CommentDto;
+import db.entity.CommentEntity;
 
 import java.sql.Connection;
 import java.util.List;
@@ -11,4 +12,6 @@ public interface CommentDao<K, E> extends Dao<K, E> {
     Optional<E> findById(K id, Connection connection);
 
     List<E> findAllByFilter(CommentDto filter);
+
+    List<E> findByStatusId(Integer statusId);
 }

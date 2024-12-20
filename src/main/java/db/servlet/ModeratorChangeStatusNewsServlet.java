@@ -18,7 +18,7 @@ import static db.util.UrlPath.UPDATE_STATUS_NEWS;
 
 @MultipartConfig(fileSizeThreshold = 1024 * 1024)
 @WebServlet(UPDATE_STATUS_NEWS)
-public class ModeratorChangeStatusServlet extends HttpServlet {
+public class ModeratorChangeStatusNewsServlet extends HttpServlet {
 
     private final NewsServiceImpl newsService = NewsServiceImpl.getInstance();
     private final StatusServiceImpl statusService = StatusServiceImpl.getInstance();
@@ -26,7 +26,7 @@ public class ModeratorChangeStatusServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var newsIdParam = req.getParameter("newsId");
-        Integer newsId = Integer.parseInt(newsIdParam);
+        Long newsId = Long.parseLong(newsIdParam);
         var statusName = req.getParameter("status");
         Integer statusId = statusService.findByName(statusName)
                 .map(StatusesEntity::getStatusId)

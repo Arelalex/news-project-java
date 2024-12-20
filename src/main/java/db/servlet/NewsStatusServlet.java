@@ -33,7 +33,7 @@ public class NewsStatusServlet extends HttpServlet {
         } else {
             req.setAttribute("news", newsService.findAll());
         }
-        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.MODERATOR_JSP))
+        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.MODERATOR_NEWS_JSP))
                 .forward(req, resp);
     }
 }

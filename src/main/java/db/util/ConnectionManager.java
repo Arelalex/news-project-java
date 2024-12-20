@@ -20,7 +20,6 @@ public class ConnectionManager {
     private static String USERNAME_KEY = "db.username";
     private static String URL_KEY = "db.url";
     private static String POOL_SIZE_KEY = "db.pool.size";
-    // private static List<Connection> sourceConnections;
     private static BlockingQueue<Connection> pool;
 
     static {

@@ -1,8 +1,9 @@
 package db.servlet;
 
+import db.dto.CommentDto;
 import db.enums.JspPage;
+import db.enums.Statuses;
 import db.service.impl.CommentServiceImpl;
-import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
 import db.util.UrlPath;
 import jakarta.servlet.ServletException;
@@ -17,24 +18,15 @@ import java.io.IOException;
 public class CommentServlet extends HttpServlet {
 
     private final CommentServiceImpl commentService = CommentServiceImpl.getInstance();
-    private final NewsServiceImpl newsService = NewsServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        var newsIdParam = req.getParameter("newsId");
+        CommentDto filter = CommentDto.builder()
+                .statusId(Statuses.ON_MODERATION.getId())
+                .build();
 
-        if (newsIdParam != null && !newsIdParam.isBlank()) {
-            try {
-                var newsId = Long.valueOf(newsIdParam);
-                req.setAttribute("comments", commentService.findAll());
-                req.setAttribute("news", newsService.findById(newsId));
+        req.setAttribute("comments", commentService.findAllByFilter(filter));
 
-            } catch (NumberFormatException e) {
-                throw new RuntimeException(e);
-            }
-        } else {
-            req.setAttribute("comments", commentService.findAll());
-        }
         req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.COMMENTS_JSP))
                 .forward(req, resp);
     }
