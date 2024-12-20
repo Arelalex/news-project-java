@@ -37,6 +37,7 @@ public class EditNewsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var newsIdParam = req.getParameter("newsId");
         var newsId = Long.valueOf(newsIdParam);
+
         req.setAttribute("news", newsService.findById(newsId));
         req.setAttribute("comments", commentService.findAllByFilter(new CommentDto(newsId)));
         req.setAttribute("categories", categoryService.findAll());
@@ -48,8 +49,10 @@ public class EditNewsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect(JspHelper.getPathJsp(JspPage.LOGIN_JSP));
-            return;
+            if (!req.getRequestURI().equals("/login")) {
+                resp.sendRedirect(JspHelper.getPathJsp(JspPage.LOGIN_JSP));
+                return;
+            }
         }
 
         PortalUserDto user = (PortalUserDto) session.getAttribute("user");
@@ -75,8 +78,6 @@ public class EditNewsServlet extends HttpServlet {
 
         try {
             editNewsService.update(newsDto);
-            System.out.printf("Что-то не так в сервлете с обновлением");
-
             resp.sendRedirect(UrlPath.AUTHOR_NEWS);
         } catch (ValidationException exception) {
             req.setAttribute("errors", exception.getErrors());

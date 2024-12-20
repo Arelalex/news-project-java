@@ -7,7 +7,6 @@ import db.enums.JspPage;
 import db.exception.ValidationException;
 import db.service.impl.CategoryServiceImpl;
 import db.service.impl.CreateNewsServiceImpl;
-import db.service.impl.PortalUserServiceImpl;
 import db.util.JspHelper;
 import db.util.UrlPath;
 import jakarta.servlet.ServletException;
@@ -28,7 +27,6 @@ public class CreateNewsServlet extends HttpServlet {
 
     private final CreateNewsServiceImpl createNewsService = CreateNewsServiceImpl.getInstance();
     private final CategoryServiceImpl categoryService = CategoryServiceImpl.getInstance();
-    private final PortalUserServiceImpl portalUserService = PortalUserServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -65,7 +63,7 @@ public class CreateNewsServlet extends HttpServlet {
             createNewsService.create(newsDto);
             System.out.printf("Что-то не так в сервлете с созданием новости");
 
-            resp.sendRedirect(UrlPath.NEWS);
+            resp.sendRedirect(UrlPath.AUTHOR_NEWS);
         } catch (ValidationException exception) {
             req.setAttribute("errors", exception.getErrors());
             doGet(req, resp);

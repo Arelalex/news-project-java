@@ -7,6 +7,7 @@ import db.exception.*;
 import db.util.ConnectionManager;
 
 import java.sql.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -23,18 +24,19 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
     private static final String COMMENT_CREATED_AT = "created_at";
     private static final String COMMENT_UPDATED_AT = "updated_at";
     private static final String COMMENT_ATTACHMENT = "attachment";
+    private static final String COMMENT_REASON_REJ = "reason_rej";
+
     private static final String DELETE_SQL = """
             DELETE FROM comment
             WHERE comment_id = ?
             """;
     private static final String SAVE_SQL = """
-            INSERT INTO comment (content, created_at, updated_at, attachment, news_id, user_id, status_id) 
-            VALUES (?, ?, ?, ?, ?, ?, ?);
+            INSERT INTO comment (content, created_at, updated_at, attachment, news_id, user_id, status_id, reason_rej) 
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?);
             """;
     private static final String UPDATE_SQL = """
                     UPDATE comment
                     SET content = ?,
-                        created_at = ?,
                         updated_at = ?,
                         attachment = ?,
                         news_id = ?,
@@ -50,15 +52,43 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
                    c.attachment,
                 n.news_id,
                 u.user_id,
-                s.status_id
+                s.status_id,
+                c.reason_rej
                      FROM comment c
                      LEFT JOIN news n ON c.news_id = n.news_id
                      LEFT JOIN portal_user u ON c.user_id = u.user_id
                      LEFT JOIN status s ON c.status_id = s.status_id
             """;
-    private static final String FIND_BY_ID_SQL = FIND_ALL_SQL + """
-            WHERE comment.comment_id = ?
+    private static final String SORT_SQL = """
+            ORDER BY c.created_at DESC LIMIT ? OFFSET ?
             """;
+    private static final String FIND_BY_ID_SQL = FIND_ALL_SQL + """
+            WHERE c.comment_id = ?
+            """;
+    private static final String UPDATE_STATUS_SQL = """
+            UPDATE comment SET status_id = ?, updated_at = ?, reason_rej = ? WHERE comment_id = ?
+            """;
+    private static final String UPDATE_STATUS_COMMENT_SQL = """
+            UPDATE comment SET status_id = ?, updated_at = ?, reason_rej = ? WHERE news_id = ?
+            """;
+    private static final String FIND_BY_STATUS_ID_SQL = """
+            SELECT
+                    c.comment_id,
+                    c.content, 
+                    c.created_at, 
+                    c.updated_at, 
+                    c.attachment, 
+                    c.news_id,
+                    c.user_id, 
+                    c.status_id,
+                    c.reason_rej
+                FROM comment c
+                LEFT JOIN news n ON c.news_id = n.news_id
+                LEFT JOIN portal_user u ON c.user_id = u.user_id
+                LEFT JOIN status s ON c.status_id = s.status_id
+            WHERE c.status_id = ?
+            """;
+
     private static CommentDaoImpl instance;
     private final NewsDaoImpl newsDaoImpl = NewsDaoImpl.getInstance();
     private final PortalUserDaoImpl portalUserDaoImpl = PortalUserDaoImpl.getInstance();
@@ -96,7 +126,8 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
             preparedStatement.setString(4, entity.getAttachment());
             preparedStatement.setLong(5, entity.getNews().getNewsId());
             preparedStatement.setInt(6, entity.getUser().getUserId());
-            preparedStatement.setInt(7, entity.getStatus().getStatusId());
+            preparedStatement.setInt(7, entity.getStatus().getId());
+            preparedStatement.setString(8, entity.getReasonRej());
 
             preparedStatement.executeUpdate();
 
@@ -115,18 +146,45 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(UPDATE_SQL)) {
             preparedStatement.setString(1, entity.getContent());
-            preparedStatement.setTimestamp(2, Timestamp.valueOf(entity.getCreatedAt()));
-            preparedStatement.setTimestamp(3, Timestamp.valueOf(entity.getUpdatedAt()));
-            preparedStatement.setString(4, entity.getAttachment());
-            preparedStatement.setLong(5, entity.getNews().getNewsId());
-            preparedStatement.setInt(6, entity.getUser().getUserId());
-            preparedStatement.setInt(7, entity.getStatus().getStatusId());
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(3, entity.getAttachment());
+            preparedStatement.setLong(4, entity.getNews().getNewsId());
+            preparedStatement.setInt(5, entity.getUser().getUserId());
+            preparedStatement.setInt(6, entity.getStatus().getId());
 
-            preparedStatement.setLong(8, entity.getCommentId());
+            preparedStatement.setLong(7, entity.getCommentId());
 
             preparedStatement.executeUpdate();
         } catch (SQLException throwables) {
             throw new DaoExceptionUpdate("Error updating values in table", throwables);
+        }
+    }
+
+    public boolean updateStatus(Long commentId, Integer statusId, String reason_rej) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(UPDATE_STATUS_SQL)) {
+            preparedStatement.setInt(1, statusId);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(3, reason_rej);
+            preparedStatement.setLong(4, commentId);
+
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throw new DaoExceptionUpdate("Error updating status in table", throwables);
+        }
+    }
+
+    public boolean updateStatusComment(Long newsId, Integer statusId, String reason_rej) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(UPDATE_STATUS_COMMENT_SQL)) {
+            preparedStatement.setInt(1, statusId);
+            preparedStatement.setTimestamp(2, Timestamp.valueOf(LocalDateTime.now()));
+            preparedStatement.setString(3, reason_rej);
+            preparedStatement.setLong(4, newsId);
+
+            return preparedStatement.executeUpdate() > 0;
+        } catch (SQLException throwables) {
+            throw new DaoExceptionUpdate("Error updating status in table", throwables);
         }
     }
 
@@ -171,26 +229,33 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
             whereSql.add("c.updated_at = ?");
             parameters.add("%" + filter.getUpdatedAt() + "%");
         }
-
         if (filter.getNewsId() != null) {
             whereSql.add("c.news_id = ?");
             parameters.add(filter.getNewsId());
         }
-        if (filter.getUser() != null) {
+//        if (filter.getUser() != null) {
+//            whereSql.add("c.user_id = ?");
+//            parameters.add(filter.getUser());
+//        }
+        if (filter.getUserId() != null) {
             whereSql.add("c.user_id = ?");
-            parameters.add(filter.getUser());
+            parameters.add(filter.getUserId());
         }
-        if (filter.getStatus() != null) {
+        if (filter.getStatusId() != null) {
             whereSql.add("c.status_id = ?");
-            parameters.add(filter.getStatus());
+            parameters.add(filter.getStatusId());
+        }
+        if (filter.getReasonRej() != null) {
+            whereSql.add("c.reason_rej = ?");
+            parameters.add(filter.getReasonRej());
         }
 
         parameters.add(filter.getLimit());
         parameters.add(filter.getOffset());
         var where = whereSql.stream()
-                .collect(joining(" AND ", " WHERE ", " LIMIT ? OFFSET ? "));
+                .collect(joining(" AND ", " WHERE ", " "));
 
-        var sql = FIND_ALL_SQL + where;
+        var sql = FIND_ALL_SQL + where + SORT_SQL;
 
         try (var connection = ConnectionManager.get();
              var preparedStatement = connection.prepareStatement(sql)) {
@@ -206,6 +271,24 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
             return commentEntities;
         } catch (SQLException throwables) {
             throw new DaoExceptionFindAll("Error searching for values in table", throwables);
+        }
+    }
+
+    @Override
+    public List<CommentEntity> findByStatusId(Integer statusId) {
+        try (var connection = ConnectionManager.get();
+             var preparedStatement = connection.prepareStatement(FIND_BY_STATUS_ID_SQL)) {
+            preparedStatement.setInt(1, statusId);
+
+            try (var resultSet = preparedStatement.executeQuery()) {
+                List<CommentEntity> comments = new ArrayList<>();
+                while (resultSet.next()) {
+                    comments.add(buildComment(resultSet));
+                }
+                return comments;
+            }
+        } catch (SQLException throwables) {
+            throw new DaoExceptionFindAll("Error searching comment by status ID", throwables);
         }
     }
 
@@ -236,7 +319,8 @@ public class CommentDaoImpl implements CommentDao<Long, CommentEntity> {
                 portalUserDaoImpl.findById(resultSet.getInt(FOREIGN_USER_ID),
                         resultSet.getStatement().getConnection()).orElse(null),
                 statusDaoImpl.findById(resultSet.getInt(FOREIGN_STATUS_ID),
-                        resultSet.getStatement().getConnection()).orElse(null)
+                        resultSet.getStatement().getConnection()).orElseThrow().getStatus(),
+                resultSet.getString(COMMENT_REASON_REJ)
         );
     }
 }

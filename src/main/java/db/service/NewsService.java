@@ -22,5 +22,5 @@ public interface NewsService {
 
     List<NewsDto> findByStatusId(Integer statusId);
 
-    boolean updateStatus(Integer newsId, Integer statusId, String reason_rej);
+    boolean updateStatus(Long newsId, Integer statusId, String reason_rej);
 }

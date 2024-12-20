@@ -46,7 +46,7 @@ public class NewsMapperImpl implements NewsMapper {
                 .content(entity.getContent())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
-                .image(entity.getContent())
+                .image(entity.getImage())
                 .user(entity.getUser())
                 .category(entity.getCategory())
                 .status(entity.getStatus())

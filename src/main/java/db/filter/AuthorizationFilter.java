@@ -2,6 +2,7 @@ package db.filter;
 
 import db.dto.PortalUserDto;
 import db.enums.Roles;
+import db.util.UrlPath;
 import jakarta.servlet.*;
 import jakarta.servlet.annotation.WebFilter;
 import jakarta.servlet.http.HttpServletRequest;
@@ -36,7 +37,10 @@ public class AuthorizationFilter implements Filter {
             USER_NEWS,
             CREATE_NEWS,
             AUTHOR_NEWS,
-            EDIT_NEWS);
+            EDIT_NEWS,
+            CREATE_COMMENT,
+            AUTHOR_COMMENTS,
+            EDIT_COMMENT);
     private static final Set<String> MODERATOR_PUBLIC_PATH = Set.of(
             LOGIN,
             REGISTRATION,
@@ -47,6 +51,7 @@ public class AuthorizationFilter implements Filter {
             USERS,
             USERS_DETAILS,
             CATEGORIES,
+            CATEGORIES_NEWS,
             COMMENTS,
             ROLES,
             STATUSES,
@@ -55,7 +60,10 @@ public class AuthorizationFilter implements Filter {
             MODERATOR,
             MODERATOR_NEWS_DETAILS,
             UPDATE_STATUS_NEWS,
-            STATUSES + MODERATOR_NEWS_DETAILS);
+            UPDATE_STATUS_COMMENTS,
+            STATUSES + MODERATOR_NEWS_DETAILS,
+            MODERATOR_NEWS,
+            MODERATOR_COMMENTS);
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
@@ -63,6 +71,10 @@ public class AuthorizationFilter implements Filter {
         var uri = ((HttpServletRequest) servletRequest).getRequestURI();
         var user = (PortalUserDto) ((HttpServletRequest) servletRequest).getSession().getAttribute("user");
 
+        if ("/".equals(uri)) {
+            ((HttpServletResponse) servletResponse).sendRedirect(UrlPath.NEWS);
+            return;
+        }
         if (isPublicPath(uri)) {
             filterChain.doFilter(servletRequest, servletResponse);
             return;

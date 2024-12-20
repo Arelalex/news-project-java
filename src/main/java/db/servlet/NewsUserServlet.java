@@ -1,7 +1,10 @@
 package db.servlet;
 
 import db.dto.NewsDto;
+import db.dto.PortalUserDto;
 import db.enums.JspPage;
+import db.enums.Roles;
+import db.enums.Statuses;
 import db.service.NewsService;
 import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
@@ -25,17 +28,24 @@ public class NewsUserServlet extends HttpServlet {
         if (userIdParam != null && !userIdParam.isBlank()) {
             try {
                 var userId = Integer.valueOf(userIdParam);
-                var filter = new NewsDto(userId, null, null);
+
+                NewsDto filter = NewsDto.builder()
+                        .userId(userId)
+                        .statusId(Statuses.APPROVED.getId())
+                        .build();
 
                 req.setAttribute("news", newsService.findAllByFilter(filter));
+                var user = (PortalUserDto) req.getSession().getAttribute("user");
+
+                if (user != null && user.getRole() == Roles.MODERATOR) {
+                    req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.MODERATOR_NEWS_JSP)).forward(req, resp);
+                } else {
+                    req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP)).forward(req, resp);
+                }
             } catch (NumberFormatException e) {
                 throw new RuntimeException(e);
             }
-        } else {
-            req.setAttribute("news", newsService.findAll());
         }
-        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP))
-                .forward(req, resp);
     }
 }
 

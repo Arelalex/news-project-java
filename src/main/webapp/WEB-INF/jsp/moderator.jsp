@@ -8,20 +8,9 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<h2><fmt:message key="page.moderation.title" /></h2>
-<c:forEach var="news" items="${requestScope.news}">
-    <li><a href="${pageContext.request.contextPath}/moderator/news/details?newsId=${news.newsId}">
-            ${news.title}</a>
-    </li>
-    <p>${news.description}</p>
-    <p><span><fmt:message key="page.moderation.createdAt" />:</span> ${news.formattedCreatedAt}
-        <span>| <fmt:message key="page.moderation.updatedAt" />:</span> ${news.formattedUpdatedAt}
-        <span>| <fmt:message key="page.moderation.status" />:</span> ${news.status}
-        <span>| <fmt:message key="page.moderation.category" />:</span> ${news.category.category}
-        <span>| <fmt:message key="page.moderation.author" />:</span> ${news.user.nickname}
-    </p>
-    <br>
-</c:forEach>
+<h3><a href="${pageContext.request.contextPath}/moderator-news"><fmt:message key="page.moderation.listNews" /></a></h3>
+<h3><a href="${pageContext.request.contextPath}/comments"><fmt:message key="page.moderation.listComments" /></a></h3>
+<h3><a href="${pageContext.request.contextPath}/users"><fmt:message key="page.moderation.listUsers" /></a></h3>
 <h3><fmt:message key="page.moderation.listCategory" />:</h3>
 <ul>
     <c:forEach var="category" items="${requestScope.categories}">
@@ -35,6 +24,14 @@
     <c:forEach var="status" items="${requestScope.statuses}">
         <li>
             <a href="${pageContext.request.contextPath}/statuses/news?status=${status.status}">${status.status}</a>
+        </li>
+    </c:forEach>
+</ul><br>
+<h3><fmt:message key="page.moderation.listOfComments" />:</h3>
+<ul>
+    <c:forEach var="status" items="${requestScope.statuses}">
+        <li>
+            <a href="${pageContext.request.contextPath}/statuses/comments?status=${status.status}">${status.status}</a>
         </li>
     </c:forEach>
 </ul><br>

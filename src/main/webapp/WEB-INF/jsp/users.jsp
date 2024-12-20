@@ -12,8 +12,9 @@
 <ul>
     <c:forEach var="user" items="${requestScope.users}">
         <li>
-            <a href="${pageContext.request.contextPath}/users?userId=${user.userId}">
-                    ${user.firstName} ${user.lastName}</a>
+            <span style="margin-right: 10px;"><a href="${pageContext.request.contextPath}/users?userId=${user.userId}">
+                    ${user.firstName} ${user.lastName}</a></span>
+            <span>${user.role}</span>
         </li>
     </c:forEach>
 </ul>

@@ -26,8 +26,10 @@ public class AuthorNewsServlet extends HttpServlet {
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         HttpSession session = req.getSession(false);
         if (session == null || session.getAttribute("user") == null) {
-            resp.sendRedirect(JspHelper.getPathJsp(JspPage.LOGIN_JSP));
-            return;
+            if (!req.getRequestURI().equals("/login")) {
+                resp.sendRedirect(JspHelper.getPathJsp(JspPage.LOGIN_JSP));
+                return;
+            }
         }
         PortalUserDto user = (PortalUserDto) session.getAttribute("user");
         if (user != null && user.getRole() == Roles.USER) {
