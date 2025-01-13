@@ -1,5 +1,6 @@
 package db.entity;
 
+import db.enums.Statuses;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -20,16 +21,7 @@ public class CommentEntity {
     private String attachment;
     private NewsEntity news;
     private PortalUserEntity user;
-    private StatusesEntity status;
-
-    public CommentEntity(String content, LocalDateTime createAt, LocalDateTime updatedAt, String attachment, NewsEntity news, PortalUserEntity user, StatusesEntity status) {
-        this.content = content;
-        this.createdAt = createAt;
-        this.updatedAt = updatedAt;
-        this.attachment = attachment;
-        this.news = news;
-        this.user = user;
-        this.status = status;
-    }
+    private Statuses status;
+    private String reasonRej;
 
 }

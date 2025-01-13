@@ -7,25 +7,25 @@
 </head>
 <body>
 <%@ include file="header.jsp" %>
-<%--<img src="${pageContext.request.contextPath}/images/users/5.jpg" alt="User image">--%>
 <form action="${pageContext.request.contextPath}/create-news" method="post" enctype="multipart/form-data">
-    <label for="titleId"><strong><fmt:message key="page.createNews.title" />:</strong>
+    <label for="titleId"><strong><fmt:message key="page.createNews.title" />: </strong>
         <input type="text" name="title" id="titleId" required style="width: 500px; height: 21px;">
     </label><br><br>
-    <label for="descriptionId"><strong><fmt:message key="page.createNews.description" />:</strong>
-        <textarea name="description" id="descriptionId" required style="width: 500px; height: 100px;" maxlength="256"></textarea>
+    <label for="descriptionId"><strong><fmt:message key="page.createNews.description" />: </strong>
+        <textarea name="description" id="descriptionId" required style="width: 500px; height: 100px;"
+                  maxlength="256"></textarea>
     </label><br><br>
-    <label for="contentId"><strong><fmt:message key="page.createNews.content" />:</strong>
+    <label for="contentId"><strong><fmt:message key="page.createNews.content" />: </strong>
         <textarea name="content" id="contentId" required style="width: 500px; height: 300px;"></textarea>
     </label><br><br>
-    <label for="categoryId"><strong><fmt:message key="page.createNews.category" />:</strong>
+    <label for="categoryId"><strong><fmt:message key="page.createNews.category" />: </strong>
         <select name="category" id="categoryId" required>
             <c:forEach var="category" items="${requestScope.categories}">
                 <option value="${category.category}">${category.category}</option>
             </c:forEach>
         </select>
     </label><br><br>
-    <label for="imageId"><strong><fmt:message key="page.createNews.image" />:</strong>
+    <label for="imageId"><strong><fmt:message key="page.createNews.image" />: </strong>
         <input type="file" name="image" id="imageId" required>
     </label><br><br>
     <button type="submit"><fmt:message key="page.createNews.button.send" /></button>

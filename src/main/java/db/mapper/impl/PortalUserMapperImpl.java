@@ -27,6 +27,7 @@ public class PortalUserMapperImpl implements PortalUserMapper {
                 .lastName(dto.getLastName())
                 .nickname(dto.getNickname())
                 .email(dto.getEmail())
+                .image(dto.getImage())
                 .role(dto.getRole())
                 .build();
     }
@@ -40,6 +41,7 @@ public class PortalUserMapperImpl implements PortalUserMapper {
                 .lastName(portalUser.getLastName())
                 .nickname(portalUser.getNickname())
                 .email(portalUser.getEmail())
+                .image(portalUser.getImage())
                 .role(portalUser.getRole())
                 .build();
     }

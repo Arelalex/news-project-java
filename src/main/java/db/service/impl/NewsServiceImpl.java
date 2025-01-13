@@ -1,7 +1,9 @@
 package db.service.impl;
 
+import db.dao.impl.CommentDaoImpl;
 import db.dao.impl.NewsDaoImpl;
 import db.dto.NewsDto;
+import db.enums.Statuses;
 import db.exception.DaoExceptionUpdate;
 import db.mapper.NewsMapper;
 import db.mapper.impl.NewsMapperImpl;
@@ -14,6 +16,7 @@ public class NewsServiceImpl implements NewsService {
 
     private static NewsServiceImpl instance;
     private final NewsDaoImpl newsDao = NewsDaoImpl.getInstance();
+    private final CommentDaoImpl commentDao = CommentDaoImpl.getInstance();
     private final NewsMapper newsMapper = NewsMapperImpl.getInstance();
 
     private NewsServiceImpl() {
@@ -69,10 +72,15 @@ public class NewsServiceImpl implements NewsService {
     }
 
     @Override
-    public boolean updateStatus(Integer newsId, Integer statusId, String reasonRej) {
+    public boolean updateStatus(Long newsId, Integer statusId, String reasonRej) {
         try {
             System.out.println("Updating status for newsId: " + newsId + " with statusId: " + statusId);
-            return newsDao.updateStatus(newsId, statusId, reasonRej);
+            boolean isNewsUpdated = newsDao.updateStatus(newsId, statusId, reasonRej);
+            if (isNewsUpdated && statusId == Statuses.DELETED.getId()) {
+                var commentStatus = Statuses.DELETED.getId();
+                commentDao.updateStatusComment(newsId, commentStatus, reasonRej);
+            }
+            return isNewsUpdated;
         } catch (DaoExceptionUpdate e) {
             System.err.println("Error while updating status for newsId: " + newsId + ", statusId: " + statusId);
             throw new DaoExceptionUpdate("Error while updating status", e);

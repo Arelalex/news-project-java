@@ -34,6 +34,7 @@ public class PortalUserServiceImpl implements PortalUserService {
                         .lastName(user.getLastName())
                         .nickname(user.getNickname())
                         .email(user.getEmail())
+                        .image(user.getImage())
                         .role(user.getRole())
                         .build()
                 )
@@ -61,5 +62,13 @@ public class PortalUserServiceImpl implements PortalUserService {
     @Override
     public void delete(PortalUserDto portalUserDto) {
 
+    }
+
+    @Override
+    public List<PortalUserDto> findAllByFilter(PortalUserDto filter) {
+        return portalUserDao.findAllByFilter(filter)
+                .stream()
+                .map(portalUserMapper::toDto)
+                .toList();
     }
 }

@@ -30,9 +30,9 @@ public class EditNewsValidator implements Validator<EditNewsDto> {
         if (object.getContent().trim().isEmpty()) {
             validationResult.add(Error.of("invalid.content", "Content is invalid"));
         }
-        if (object.getImage().getSize() == 0) {
+       /* if (object.getImage().getSize() == 0) {
             validationResult.add(Error.of("invalid.image", "Image is empty"));
-        }
+        }*/
         return validationResult;
     }
 }

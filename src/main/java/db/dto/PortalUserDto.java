@@ -16,6 +16,7 @@ public class PortalUserDto {
     private String lastName;
     private String nickname;
     private String email;
+    private String image;
     private Roles role;
     private Integer limit;
     private Integer offset;

@@ -1,6 +1,8 @@
 package db.servlet;
 
+import db.dto.NewsDto;
 import db.enums.JspPage;
+import db.service.impl.NewsServiceImpl;
 import db.service.impl.PortalUserServiceImpl;
 import db.util.JspHelper;
 import db.util.UrlPath;
@@ -16,15 +18,18 @@ import java.io.IOException;
 public class PortalUserServlet extends HttpServlet {
 
     private final PortalUserServiceImpl portalUserService = PortalUserServiceImpl.getInstance();
+    private final NewsServiceImpl newsService = NewsServiceImpl.getInstance();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         var userIdParam = req.getParameter("userId");
+
         if (userIdParam != null && !userIdParam.isBlank()) {
             try {
                 var userId = Integer.valueOf(userIdParam);
-
                 req.setAttribute("user", portalUserService.findById(userId));
+                req.setAttribute("news", newsService.findAllByFilter(new NewsDto(userId, null, null)));
+
                 req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.USERS_DETAILS_JSP))
                         .forward(req, resp);
                 return;

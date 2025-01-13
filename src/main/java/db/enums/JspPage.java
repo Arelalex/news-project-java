@@ -16,10 +16,16 @@ public enum JspPage {
     USERS_DETAILS_JSP("users-details"),
     CREATE_NEWS_JSP("create-news"),
     MODERATOR_JSP("moderator"),
+    MODERATOR_NEWS_JSP("moderator-news"),
     MODERATOR_NEWS_DETAILS_JSP("moderator-news-details"),
     UPDATE_STATUS_NEWS_JSP("update-status-news"),
     AUTHOR_NEWS_JSP("author-news"),
-    EDIT_NEWS_JSP("edit-news");
+    AUTHOR_COMMENT_JSP("author-comments"),
+    EDIT_NEWS_JSP("edit-news"),
+    EDIT_COMMENT_JSP("edit-comment"),
+    CREATE_COMMENT_JSP("create-comment"),
+    MODERATOR_EDIT_COMMENT_JSP("moderator-edit-comment"),
+    MODERATOR_COMMENTS_JSP("moderator-comments");
 
     private final String path;
 

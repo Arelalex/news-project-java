@@ -1,6 +1,5 @@
 package db.servlet;
 
-import db.dao.impl.StatusDaoImpl;
 import db.enums.JspPage;
 import db.service.impl.StatusServiceImpl;
 import db.util.JspHelper;
@@ -16,7 +15,6 @@ import java.io.IOException;
 @WebServlet(UrlPath.STATUSES)
 public class StatusServlet extends HttpServlet {
 
-    private final StatusDaoImpl statusDao = StatusDaoImpl.getInstance();
     private final StatusServiceImpl statusService = StatusServiceImpl.getInstance();
 
     @Override

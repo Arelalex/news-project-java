@@ -1,8 +1,10 @@
 package db.servlet;
 
+import db.dto.NewsDto;
 import db.dto.PortalUserDto;
 import db.enums.JspPage;
 import db.enums.Roles;
+import db.enums.Statuses;
 import db.service.NewsService;
 import db.service.impl.NewsServiceImpl;
 import db.util.JspHelper;
@@ -15,7 +17,7 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 
-@WebServlet(UrlPath.CATEGORIES + UrlPath.NEWS)
+@WebServlet(UrlPath.CATEGORIES_NEWS)
 public class NewsCategoryServlet extends HttpServlet {
 
     private final NewsService newsService = NewsServiceImpl.getInstance();
@@ -26,11 +28,18 @@ public class NewsCategoryServlet extends HttpServlet {
         if (categoryIdParam != null && !categoryIdParam.isBlank()) {
             try {
                 var categoryId = Integer.valueOf(categoryIdParam);
-                req.setAttribute("news", newsService.findByCategoryId(categoryId));
+
+                NewsDto filter = NewsDto.builder()
+                        .categoryId(categoryId)
+                        .statusId(Statuses.APPROVED.getId())
+                        .build();
+
+                req.setAttribute("news", newsService.findAllByFilter(filter));
+
 
                 var user = (PortalUserDto) req.getSession().getAttribute("user");
                 if (user != null && user.getRole() == Roles.MODERATOR) {
-                    req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.MODERATOR_JSP)).forward(req, resp);
+                    req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.MODERATOR_NEWS_JSP)).forward(req, resp);
                 } else {
                     req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP)).forward(req, resp);
                 }
@@ -38,9 +47,6 @@ public class NewsCategoryServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-        req.setAttribute("news", newsService.findAll());
-        req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP))
-                .forward(req, resp);
     }
 }
 

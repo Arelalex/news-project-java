@@ -8,7 +8,6 @@ import db.mapper.impl.CreateNewsMapperImpl;
 import db.service.CreateNewsService;
 import db.service.ImageService;
 import db.validator.CreateNewsValidator;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.time.LocalDateTime;

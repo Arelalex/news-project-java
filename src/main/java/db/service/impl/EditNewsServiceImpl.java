@@ -8,7 +8,6 @@ import db.mapper.impl.EditNewsMapperImpl;
 import db.service.EditNewsService;
 import db.service.ImageService;
 import db.validator.EditNewsValidator;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -40,10 +39,12 @@ public class EditNewsServiceImpl implements EditNewsService {
         newsEntity.setUpdatedAt(LocalDateTime.now());
         newsEntity.setStatus(Statuses.ON_MODERATION);
 
-        try {
-            imageService.upload(newsEntity.getImage(), newsDto.getImage().getInputStream());
-        } catch (IOException e) {
-            throw new RuntimeException(e);
+        if (newsEntity.getImage() != null && newsDto.getImage().getSize() > 0) {
+            try {
+                imageService.upload(newsEntity.getImage(), newsDto.getImage().getInputStream());
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
 
         newsDao.update(newsEntity);

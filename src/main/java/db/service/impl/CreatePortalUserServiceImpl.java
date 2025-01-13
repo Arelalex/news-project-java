@@ -9,7 +9,6 @@ import db.mapper.impl.PortalUserMapperImpl;
 import db.service.CreatePortalUserService;
 import db.service.ImageService;
 import db.validator.CreateUserValidator;
-import lombok.SneakyThrows;
 
 import java.io.IOException;
 import java.util.Optional;

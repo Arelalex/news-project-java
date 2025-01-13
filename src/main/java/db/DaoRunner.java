@@ -37,7 +37,7 @@ public class DaoRunner {
         LocalDateTime updatedAt = LocalDateTime.now();
         System.out.println(createdAt);
 
-        boolean isUpdated = newsService.updateStatus(3, 2, "Rejected");
+        boolean isUpdated = newsService.updateStatus(3L, 2, "Rejected");
         System.out.println("обновление успешно " + isUpdated);
 
         // поиск с использованием фильтра по названию Роли

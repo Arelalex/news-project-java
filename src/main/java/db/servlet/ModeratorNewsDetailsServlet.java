@@ -40,7 +40,6 @@ public class ModeratorNewsDetailsServlet extends HttpServlet {
                 throw new RuntimeException(e);
             }
         }
-
         req.setAttribute("news", newsService.findAll());
         req.getRequestDispatcher(JspHelper.getPathJsp(JspPage.NEWS_JSP))
                 .forward(req, resp);

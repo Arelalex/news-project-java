@@ -8,7 +8,6 @@ import db.util.LocalDateFormatter;
 public class CreateNewsValidator implements Validator<CreateNewsDto> {
 
     private static CreateNewsValidator instance;
-    private final PortalUserDaoImpl statusDao = PortalUserDaoImpl.getInstance();
 
     private CreateNewsValidator() {
     }
